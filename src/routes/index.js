@@ -12,6 +12,10 @@ const Home = lazy(() =>
   import(/* webpackChunkName: 'Home' */ "../features/home")
 );
 
+const Members = lazy(() =>
+  import(/* webpackChunkName: 'Members' */ "../features/members")
+);
+
 export const Routes = () => {
   return (
     <BrowserRouter>
@@ -22,8 +26,18 @@ export const Routes = () => {
               path="/"
               exact
               render={matchProps => (
-                <Layout>
+                <Layout {...matchProps}>
                   <Home {...matchProps} />
+                </Layout>
+              )}
+            />
+
+            <Route
+              path="/members"
+              exact
+              render={matchProps => (
+                <Layout {...matchProps}>
+                  <Members {...matchProps} />
                 </Layout>
               )}
             />

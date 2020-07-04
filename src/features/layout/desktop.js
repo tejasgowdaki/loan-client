@@ -46,16 +46,46 @@ class Desktop extends Component {
               size="large"
             >
               <Container>
-                <Menu.Item as="a" header>
+                <Menu.Item
+                  as="a"
+                  header
+                  onClick={() => this.props.onClickNavigate("/")}
+                >
                   Loan Manager
                 </Menu.Item>
 
-                <Menu.Item as="a" active>
+                <Menu.Item
+                  as="a"
+                  active={this.props.pathname === "/"}
+                  onClick={() => this.props.onClickNavigate("/")}
+                >
                   Home
                 </Menu.Item>
-                <Menu.Item as="a">Members</Menu.Item>
-                <Menu.Item as="a">Loans</Menu.Item>
-                <Menu.Item as="a">Savings</Menu.Item>
+
+                <Menu.Item
+                  as="a"
+                  active={this.props.pathname === "/members"}
+                  onClick={() => this.props.onClickNavigate("/members")}
+                >
+                  Members
+                </Menu.Item>
+
+                <Menu.Item
+                  as="a"
+                  active={this.props.pathname === "/loans"}
+                  onClick={() => this.props.onClickNavigate("/loans")}
+                >
+                  Loans
+                </Menu.Item>
+
+                <Menu.Item
+                  as="a"
+                  active={this.props.pathname === "/savings"}
+                  onClick={() => this.props.onClickNavigate("/savings")}
+                >
+                  Savings
+                </Menu.Item>
+
                 <Menu.Item position="right">
                   <Button as="a" inverted={!fixed}>
                     Log in
