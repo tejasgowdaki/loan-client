@@ -14,7 +14,7 @@ export const getMembers = async () => {
 export const createMember = async member => {
   try {
     const response = await post(url, member);
-    return response.member;
+    return response;
   } catch (error) {
     throw error;
   }

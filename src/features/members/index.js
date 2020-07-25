@@ -1,14 +1,15 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { Icon, Table, Button } from "semantic-ui-react";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { Card, Header, Segment, Button } from 'semantic-ui-react';
 
-import MemberForm from "./form";
-import ConfirmModal from "../common/confirmModal";
+import MemberForm from './components/form';
+import MemberCard from './components/card';
 
-import { createMember, updateMember, deleteMember } from "./api.js";
+import { createMember, updateMember } from './api.js';
 
-import { setAlert } from "../alert/reducer";
-import { fetchMembers, newMember, upsertMember, removeMember } from "./reducer";
+import { setAlert } from '../alert/reducer';
+import { fetchMembers, newMember, upsertMember } from './reducer';
+import { fetchSavings, newSaving } from '../savings/reducer';
 
 class Members extends Component {
   constructor(props) {
@@ -16,25 +17,18 @@ class Members extends Component {
     this.state = {
       member: {},
       isShowForm: false,
-      isDisabled: false,
-      isShowDeleteModal: false,
-      deleteMember: null
+      isDisabled: false
     };
   }
 
   componentDidMount = () => {
     this.props.fetchMembers();
+    this.props.fetchSavings();
   };
 
-  toggleForm = (object = null) => {
-    this.setState({
-      member: object || {},
-      isShowForm: !this.state.isShowForm
-    });
-  };
+  toggleForm = (object = null) => this.setState({ member: object || {}, isShowForm: !this.state.isShowForm });
 
-  updateMember = (key, value) =>
-    this.setState({ member: { ...this.state.member, [key]: value } });
+  updateMember = (key, value) => this.setState({ member: { ...this.state.member, [key]: value } });
 
   validate = () => {
     if (!this.state.member.name) return false;
@@ -54,21 +48,19 @@ class Members extends Component {
 
       if (this.state.member._id) {
         // update member
-        const member = await updateMember(
-          this.state.member._id,
-          this.state.member
-        );
+        const member = await updateMember(this.state.member._id, this.state.member);
         this.props.upsertMember(member);
         this.props.setAlert({
-          type: "Success",
+          type: 'Success',
           message: `Successfully updated ${member.name}`
         });
       } else {
         // new member
-        const member = await createMember(this.state.member);
+        const { member, saving } = await createMember(this.state.member);
         this.props.newMember(member);
+        this.props.newSaving(saving);
         this.props.setAlert({
-          type: "Success",
+          type: 'Success',
           message: `Successfully created ${member.name}`
         });
       }
@@ -76,35 +68,7 @@ class Members extends Component {
       this.toggleForm();
       this.setState({ isDisabled: false });
     } catch (error) {
-      this.props.setAlert({ type: "Error", message: error.message });
-      this.setState({ isDisabled: false });
-    }
-  };
-
-  promptDeleteModal = member => {
-    this.setState({ isShowDeleteModal: true, deleteMember: member });
-  };
-
-  cancelDelete = () => {
-    this.setState({ isShowDeleteModal: false, deleteMember: null });
-  };
-
-  confirmDelete = async () => {
-    try {
-      this.setState({ isDisabled: true });
-      const memberId = await deleteMember(this.state.deleteMember._id);
-      this.props.removeMember(memberId);
-      this.props.setAlert({
-        type: "Success",
-        message: `Successfully deleted ${this.state.deleteMember.name}`
-      });
-      this.setState({
-        isShowDeleteModal: false,
-        deleteMember: null,
-        isDisabled: false
-      });
-    } catch (error) {
-      this.props.setAlert({ type: "Error", message: error.message });
+      this.props.setAlert({ type: 'Error', message: error.message });
       this.setState({ isDisabled: false });
     }
   };
@@ -112,54 +76,22 @@ class Members extends Component {
   render() {
     return (
       <>
-        <Table celled striped>
-          <Table.Header>
-            <Table.Row>
-              <Table.HeaderCell colSpan="3">
-                Members
-                <span textalign="right" style={{ paddingLeft: "2.5em " }}>
-                  <Button
-                    as="a"
-                    size="mini"
-                    secondary
-                    onClick={() => this.toggleForm()}
-                    disabled={this.state.isDisabled}
-                  >
-                    Add
-                  </Button>
-                </span>
-              </Table.HeaderCell>
-            </Table.Row>
-          </Table.Header>
+        <Segment clearing>
+          <Header as="h3" floated="left">
+            Members
+          </Header>
+          <Header as="h3" floated="right">
+            <Button as="a" size="mini" secondary onClick={this.toggleForm} disabled={this.state.isDisabled}>
+              Add
+            </Button>
+          </Header>
+        </Segment>
 
-          <Table.Body>
-            {this.props.members.map(member => (
-              <Table.Row key={member._id}>
-                <Table.Cell collapsing>
-                  <Icon name="user" /> {member.name}
-                </Table.Cell>
-                <Table.Cell>
-                  <Icon name="mobile" />
-                  {member.mobile}
-                </Table.Cell>
-                <Table.Cell textAlign="right">
-                  <Icon
-                    style={{ paddingRight: "2.5em " }}
-                    name="pencil"
-                    onClick={() => this.toggleForm(member)}
-                    disabled={this.state.isDisabled}
-                  />
-                  <Icon
-                    style={{ paddingRight: "2.5em ", color: "red" }}
-                    name="trash"
-                    onClick={() => this.promptDeleteModal(member)}
-                    disabled={this.state.isDisabled}
-                  />
-                </Table.Cell>
-              </Table.Row>
-            ))}
-          </Table.Body>
-        </Table>
+        <Card.Group>
+          {this.props.memberIds.map(m => (
+            <MemberCard key={m} memberId={m} toggleForm={this.toggleForm} />
+          ))}
+        </Card.Group>
 
         {this.state.isShowForm ? (
           <MemberForm
@@ -170,28 +102,22 @@ class Members extends Component {
             isDisabled={this.state.isDisabled}
           />
         ) : null}
-
-        {this.state.isShowDeleteModal ? (
-          <ConfirmModal
-            header="Deleting member!!"
-            content={`Are you sure you want to delete ${this.state.deleteMember.name}?`}
-            onClickSubmit={this.confirmDelete}
-            onClickCancel={this.cancelDelete}
-          />
-        ) : null}
       </>
     );
   }
 }
 
-const mapStateToProps = ({ members }, ownProps) => ({ members });
+const mapStateToProps = ({ members }) => ({
+  memberIds: members.map(m => m._id)
+});
 
 const mapDispatchToProps = {
   setAlert,
   fetchMembers,
   newMember,
   upsertMember,
-  removeMember
+  fetchSavings,
+  newSaving
 };
 
 export default connect(

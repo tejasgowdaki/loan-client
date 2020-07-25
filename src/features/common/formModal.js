@@ -1,10 +1,16 @@
-import React from "react";
-import { Modal, Button, Icon } from "semantic-ui-react";
+import React from 'react';
+import { Modal, Button, Icon } from 'semantic-ui-react';
 
 const FormModal = ({ header, onClose, onSubmit, isDisabled, children }) => (
   <Modal open centered={false}>
-    <Modal.Header>{header}</Modal.Header>
-    <Modal.Content scrolling>{children}</Modal.Content>
+    <Modal.Header>
+      <span style={{ paddingRight: '3em ' }}>{header}</span>
+    </Modal.Header>
+
+    <Modal.Content style={{ minHeight: 400 }} scrolling>
+      {children}
+    </Modal.Content>
+
     <Modal.Actions>
       <Button color="red" onClick={onClose} inverted disabled={isDisabled}>
         <Icon name="remove" /> Cancel
