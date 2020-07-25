@@ -1,10 +1,19 @@
-import React, { Component, Fragment } from "react";
+import React, { Component, Fragment } from 'react';
+import { connect } from 'react-redux';
 
-import Alert from "./features/alert";
+import Alert from './features/alert';
 
-import { Routes } from "./routes";
+import { fetchMembers } from './features/members/reducer';
+import { fetchSavings } from './features/savings/reducer';
+
+import { Routes } from './routes';
 
 class App extends Component {
+  componentDidMount = () => {
+    this.props.dispatch(fetchMembers());
+    this.props.dispatch(fetchSavings());
+  };
+
   render() {
     return (
       <Fragment>
@@ -15,4 +24,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default connect()(App);

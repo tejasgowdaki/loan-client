@@ -2,14 +2,14 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Card, Header, Segment, Button } from 'semantic-ui-react';
 
-import MemberForm from './components/form';
-import MemberCard from './components/card';
+import MemberForm from '../components/form';
+import MemberCard from '../components/card';
 
-import { createMember, updateMember } from './api.js';
+import { createMember, updateMember } from '../api.js';
 
-import { setAlert } from '../alert/reducer';
-import { fetchMembers, newMember, upsertMember } from './reducer';
-import { fetchSavings, newSaving } from '../savings/reducer';
+import { setAlert } from '../../alert/reducer';
+import { newMember, upsertMember } from '../reducer';
+import { newSaving } from '../../savings/reducer';
 
 class Members extends Component {
   constructor(props) {
@@ -20,11 +20,6 @@ class Members extends Component {
       isDisabled: false
     };
   }
-
-  componentDidMount = () => {
-    this.props.fetchMembers();
-    this.props.fetchSavings();
-  };
 
   toggleForm = (object = null) => this.setState({ member: object || {}, isShowForm: !this.state.isShowForm });
 
@@ -73,6 +68,8 @@ class Members extends Component {
     }
   };
 
+  navigateTo = url => this.props.history.push(url);
+
   render() {
     return (
       <>
@@ -89,7 +86,7 @@ class Members extends Component {
 
         <Card.Group>
           {this.props.memberIds.map(m => (
-            <MemberCard key={m} memberId={m} toggleForm={this.toggleForm} />
+            <MemberCard key={m} memberId={m} toggleForm={this.toggleForm} navigateTo={this.navigateTo} />
           ))}
         </Card.Group>
 
@@ -113,10 +110,8 @@ const mapStateToProps = ({ members }) => ({
 
 const mapDispatchToProps = {
   setAlert,
-  fetchMembers,
   newMember,
   upsertMember,
-  fetchSavings,
   newSaving
 };
 

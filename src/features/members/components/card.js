@@ -22,9 +22,7 @@ class MemberCard extends PureComponent {
     };
   }
 
-  toggleDeleteModal = () => {
-    this.setState({ isShowDeleteModal: !this.state.isShowDeleteModal });
-  };
+  toggleDeleteModal = () => this.setState({ isShowDeleteModal: !this.state.isShowDeleteModal });
 
   confirmDelete = async e => {
     try {
@@ -42,9 +40,7 @@ class MemberCard extends PureComponent {
     }
   };
 
-  toggleDepositForm = () => {
-    this.setState({ isShowDepositForm: !this.state.isShowDepositForm });
-  };
+  toggleDepositForm = () => this.setState({ isShowDepositForm: !this.state.isShowDepositForm });
 
   submitDeposit = async (amount, date) => {
     try {
@@ -65,6 +61,8 @@ class MemberCard extends PureComponent {
     }
   };
 
+  showMember = () => this.props.navigateTo(`/members/${this.props.memberId}`);
+
   render() {
     const { memberId, name, mobile, totalSaving, toggleForm } = this.props;
     const { isDisabled, isShowDeleteModal, isShowDepositForm } = this.state;
@@ -77,7 +75,7 @@ class MemberCard extends PureComponent {
 
             <Card.Description>
               <span style={{ paddingRight: '3em ' }}>
-                <Icon name="mobile" /> {mobile}
+                <Icon name="mobile alternate" /> {mobile}
               </span>
 
               <span style={{ paddingRight: '3em ' }}>Savings: Rs. {totalSaving}</span>
@@ -85,18 +83,11 @@ class MemberCard extends PureComponent {
           </Card.Content>
 
           <Card.Content extra>
-            <Button
-              style={{ marginRight: '1em ' }}
-              size="small"
-              color="green"
-              disabled={isDisabled}
-              onClick={this.toggleDepositForm}
-            >
+            <Button size="small" color="green" disabled={isDisabled} onClick={this.toggleDepositForm}>
               Add Deposit
             </Button>
 
             <Button
-              style={{ marginRight: '1em ' }}
               secondary
               size="small"
               onClick={() => toggleForm({ _id: memberId, name, mobile })}
@@ -105,13 +96,11 @@ class MemberCard extends PureComponent {
               Edit
             </Button>
 
-            <Button
-              style={{ marginRight: '1em ' }}
-              size="small"
-              color="red"
-              onClick={this.toggleDeleteModal}
-              disabled={isDisabled}
-            >
+            <Button size="small" color="blue" onClick={this.showMember} disabled={isDisabled}>
+              Show
+            </Button>
+
+            <Button size="small" color="red" onClick={this.toggleDeleteModal} disabled={isDisabled}>
               Delete
             </Button>
           </Card.Content>
