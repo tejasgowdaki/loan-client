@@ -2,6 +2,12 @@
   "name": "loan-client",
   "version": "0.1.0",
   "private": true,
+  "lint-staged": {
+    "*.{js,jsx,json,css}": [
+      "prettier --print-width 120 --single-quote --write",
+      "git add"
+    ]
+  },
   "dependencies": {
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
@@ -23,6 +29,7 @@
     "semantic-ui-react": "^0.88.2"
   },
   "scripts": {
+    "precommit": "lint-staged",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
