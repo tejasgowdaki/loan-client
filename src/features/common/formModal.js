@@ -12,10 +12,10 @@ const FormModal = ({ header, onClose, onSubmit, isDisabled, children }) => (
     </Modal.Content>
 
     <Modal.Actions>
-      <Button color="red" onClick={onClose} inverted disabled={isDisabled}>
+      <Button as="a" color="red" onClick={onClose} inverted disabled={isDisabled}>
         <Icon name="remove" /> Cancel
       </Button>
-      <Button color="green" onClick={onSubmit} inverted disabled={isDisabled}>
+      <Button as="a" color="green" onClick={onSubmit} inverted disabled={isDisabled}>
         <Icon name="checkmark" /> Submit
       </Button>
     </Modal.Actions>

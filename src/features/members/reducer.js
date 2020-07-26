@@ -1,6 +1,6 @@
 import createReducer from '../../store/createReducer';
 
-import { getMembers } from './api.js';
+import { getMembers } from './api';
 
 import { setAlert } from '../alert/reducer';
 
@@ -20,7 +20,7 @@ export const members = createReducer([], {
 
   [UPSERT_MEMBER](state, action) {
     let members = [...state];
-    const index = members.findIndex(m => m._id === action.member._id);
+    const index = members.findIndex((m) => m._id === action.member._id);
     if (index >= 0) {
       members[index] = action.member;
     } else {
@@ -30,20 +30,20 @@ export const members = createReducer([], {
   },
 
   [REMOVE_MEMBER](state, action) {
-    return [...state].filter(m => m._id !== action.memberId);
+    return [...state].filter((m) => m._id !== action.memberId);
   }
 });
 
-const setMembers = members => ({ type: SET_MEMBERS, members });
+const setMembers = (members) => ({ type: SET_MEMBERS, members });
 
-export const newMember = member => ({ type: NEW_MEMBER, member });
+export const newMember = (member) => ({ type: NEW_MEMBER, member });
 
-export const upsertMember = member => ({ type: UPSERT_MEMBER, member });
+export const upsertMember = (member) => ({ type: UPSERT_MEMBER, member });
 
-export const removeMember = memberId => ({ type: REMOVE_MEMBER, memberId });
+export const removeMember = (memberId) => ({ type: REMOVE_MEMBER, memberId });
 
 export const fetchMembers = () => {
-  return async (dispatch, getState) => {
+  return async (dispatch) => {
     try {
       const members = await getMembers();
       dispatch(setMembers(members));
@@ -67,6 +67,6 @@ export const searchText = createReducer('', {
   }
 });
 
-export const setSearchText = searchText => {
+export const setSearchText = (searchText) => {
   return { type: SET_SEARCH_TEXT, searchText };
 };

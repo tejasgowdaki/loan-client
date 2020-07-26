@@ -1,24 +1,17 @@
-import React from "react";
-import { Button, Header, Icon, Modal } from "semantic-ui-react";
+import React from 'react';
+import { Button, Header, Icon, Modal } from 'semantic-ui-react';
 
-const ConfirmModal = ({
-  header,
-  content,
-  submitTitle = "Yes",
-  onClickSubmit,
-  cancelTitle = "No",
-  onClickCancel
-}) => (
+const ConfirmModal = ({ header, content, submitTitle = 'Yes', onClickSubmit, cancelTitle = 'No', onClickCancel }) => (
   <Modal open basic size="small">
     <Header icon="archive" content={header} />
     <Modal.Content>
       <p>{content}</p>
     </Modal.Content>
     <Modal.Actions>
-      <Button color="red" inverted onClick={onClickCancel}>
+      <Button as="a" color="red" inverted onClick={onClickCancel}>
         <Icon name="remove" /> {cancelTitle}
       </Button>
-      <Button color="green" inverted onClick={onClickSubmit}>
+      <Button as="a" color="green" inverted onClick={onClickSubmit}>
         <Icon name="checkmark" /> {submitTitle}
       </Button>
     </Modal.Actions>

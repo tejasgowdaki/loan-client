@@ -24,7 +24,7 @@ class MemberCard extends PureComponent {
 
   toggleDeleteModal = () => this.setState({ isShowDeleteModal: !this.state.isShowDeleteModal });
 
-  confirmDelete = async e => {
+  confirmDelete = async (e) => {
     try {
       e.preventDefault();
       this.setState({ isDisabled: true });
@@ -94,11 +94,19 @@ class MemberCard extends PureComponent {
         </Card.Content>
 
         <Card.Content extra>
-          <Button style={{ margin: '0.3em' }} size="small" color="blue" onClick={this.showMember} disabled={isDisabled}>
+          <Button
+            as="a"
+            style={{ margin: '0.3em' }}
+            size="small"
+            color="blue"
+            onClick={this.showMember}
+            disabled={isDisabled}
+          >
             Show
           </Button>
 
           <Button
+            as="a"
             style={{ margin: '0.3em' }}
             secondary
             size="small"
@@ -109,6 +117,7 @@ class MemberCard extends PureComponent {
           </Button>
 
           {/* <Button
+            as="a"
             style={{ margin: '0.3em' }}
             size="small"
             color="red"
@@ -119,6 +128,7 @@ class MemberCard extends PureComponent {
           </Button> */}
 
           <Button
+            as="a"
             style={{ margin: '0.3em' }}
             size="small"
             color="green"
@@ -152,8 +162,8 @@ class MemberCard extends PureComponent {
 }
 
 const mapStateToProps = ({ members, savings }, { memberId }) => {
-  const member = members.find(m => m._id === memberId) || {};
-  const saving = savings.find(s => s.memberId === memberId) || {};
+  const member = members.find((m) => m._id === memberId) || {};
+  const saving = savings.find((s) => s.memberId === memberId) || {};
 
   return {
     name: member.name || 'N/A',
@@ -169,7 +179,4 @@ const mapDispatchToProps = {
   upsertSaving
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(MemberCard);
+export default connect(mapStateToProps, mapDispatchToProps)(MemberCard);

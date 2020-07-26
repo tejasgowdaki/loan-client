@@ -8,10 +8,13 @@ import PageNotFound from './pageNotFound';
 import ErrorBoundary from './errorBoundary';
 import Layout from '../features/layout';
 
-const Stats = lazy(() => import(/* webpackChunkName: 'Home' */ '../features/stats'));
-
 const Members = lazy(() => import(/* webpackChunkName: 'Members' */ '../features/members/containers'));
-const MemberShow = lazy(() => import(/* webpackChunkName: 'Members' */ '../features/members/containers/show.js'));
+
+const MemberShow = lazy(() => import(/* webpackChunkName: 'MemberShow' */ '../features/members/containers/show'));
+
+const Loans = lazy(() => import(/* webpackChunkName: 'Loans' */ '../features/loans/containers'));
+
+const Stats = lazy(() => import(/* webpackChunkName: 'Home' */ '../features/stats'));
 
 export const Routes = () => {
   return (
@@ -22,7 +25,17 @@ export const Routes = () => {
             <Route
               path="/"
               exact
-              render={matchProps => (
+              render={(matchProps) => (
+                <Layout {...matchProps}>
+                  <Members {...matchProps} />
+                </Layout>
+              )}
+            />
+
+            <Route
+              path="/members"
+              exact
+              render={(matchProps) => (
                 <Layout {...matchProps}>
                   <Members {...matchProps} />
                 </Layout>
@@ -32,7 +45,7 @@ export const Routes = () => {
             <Route
               path="/members/:memberId"
               exact
-              render={matchProps => (
+              render={(matchProps) => (
                 <Layout {...matchProps}>
                   <MemberShow {...matchProps} />
                 </Layout>
@@ -40,16 +53,26 @@ export const Routes = () => {
             />
 
             <Route
+              path="/loans"
+              exact
+              render={(matchProps) => (
+                <Layout {...matchProps}>
+                  <Loans {...matchProps} />
+                </Layout>
+              )}
+            />
+
+            <Route
               path="/stats"
               exact
-              render={matchProps => (
+              render={(matchProps) => (
                 <Layout {...matchProps}>
                   <Stats {...matchProps} />
                 </Layout>
               )}
             />
 
-            <Route render={matchProps => <PageNotFound {...matchProps} />} />
+            <Route render={(matchProps) => <PageNotFound {...matchProps} />} />
           </Switch>
         </Suspense>
       </ErrorBoundary>

@@ -16,6 +16,7 @@ const DepositList = ({ deposits, deleteDeposit, isDisabled }) => {
               <Label float="right">Rs. {amount}</Label>
 
               <Button
+                as="a"
                 style={{ marginLeft: '2em' }}
                 floated="right"
                 size="mini"

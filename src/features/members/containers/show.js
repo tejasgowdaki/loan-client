@@ -1,15 +1,19 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Card, Icon, Tab, Button, Header } from 'semantic-ui-react';
+import { Tab } from 'semantic-ui-react';
 
 import ConfirmModal from '../../common/confirmModal';
 import DepositList from '../../savings/components/depositList';
 import DepositForm from '../../savings/components/depositForm';
+import LoanForm from '../../loans/components/form';
+import ShowCard from '../components/showCard';
 
 import { addDeposit, deleteDeposit } from '../../savings/api';
+import { createLoan, updateLoan } from '../../loans/api';
 
 import { setAlert } from '../../alert/reducer';
 import { upsertSaving } from '../../savings/reducer';
+import { newLoan, upsertLoan } from '../../loans/reducer';
 
 class MemberShow extends Component {
   constructor(props) {
@@ -18,15 +22,17 @@ class MemberShow extends Component {
       isDisabled: false,
       isShowDeleteDepositModal: false,
       deleteDepositId: null,
-      isShowDepositForm: false
+      isShowDepositForm: false,
+      isShowLoanForm: false,
+      formLoan: null
     };
   }
 
-  promptDepositDelete = deleteDepositId => this.setState({ isShowDeleteDepositModal: true, deleteDepositId });
+  promptDepositDelete = (deleteDepositId) => this.setState({ isShowDeleteDepositModal: true, deleteDepositId });
 
   closeDeleteDepositModal = () => this.setState({ isShowDeleteDepositModal: false, deleteDepositId: null });
 
-  confirmDeleteDeposit = async e => {
+  confirmDeleteDeposit = async (e) => {
     try {
       e.preventDefault();
       this.setState({ isDisabled: true });
@@ -63,19 +69,53 @@ class MemberShow extends Component {
     }
   };
 
+  openLoanForm = (formLoan = null) => {
+    console.log('MemberShow -> openLoanForm -> formLoan', formLoan);
+    this.setState({ isShowLoanForm: !this.state.isShowLoanForm, formLoan });
+  };
+
+  submitLoan = async (amount) => {
+    try {
+      console.log('MemberShow -> submitLoan -> amount', amount);
+
+      this.setState({ isDisabled: true });
+
+      if (this.state.formLoan) {
+        // update
+        const loan = await updateLoan(this.state.formLoan._id, { memberId: this.props.memberId, amount });
+        this.props.upsertLoan(loan);
+        this.props.setAlert({
+          type: 'Success',
+          message: `Successfully udpated loan amount from Rs. ${this.state.formLoan.amount} to Rs. ${amount} for ${this.props.name}`
+        });
+      } else {
+        // create
+        const loan = await createLoan({ memberId: this.props.memberId, amount });
+        this.props.newLoan(loan);
+        this.props.setAlert({
+          type: 'Success',
+          message: `Successfully created new loan of Rs. ${amount} for ${this.props.name}`
+        });
+      }
+
+      this.setState({ isDisabled: false, isShowLoanForm: false, formLoan: null });
+    } catch (error) {
+      this.props.setAlert({ type: 'Error', message: error.message });
+      this.setState({ isDisabled: false });
+    }
+  };
+
   render() {
     const { name, mobile, totalSaving, deposits } = this.props;
+    const { isDisabled, formLoan, isShowDeleteDepositModal, isShowDepositForm, isShowLoanForm } = this.state;
+    console.log('MemberShow -> render -> formLoan', formLoan);
 
     const panes = [
       {
         menuItem: 'Saving',
         render: () => (
           <Tab.Pane>
-            <DepositList
-              deposits={deposits}
-              deleteDeposit={this.promptDepositDelete}
-              isDisabled={this.state.isDisabled}
-            />
+            <DepositList deposits={deposits} deleteDeposit={this.promptDepositDelete} isDisabled={isDisabled} />
           </Tab.Pane>
         )
       },
@@ -91,37 +131,20 @@ class MemberShow extends Component {
 
     return (
       <>
-        <div style={{ marginDown: '5em' }}>
-          <Card.Group>
-            <Card style={{ marginTop: '2em', marginLeft: '1.5em', width: 'auto' }}>
-              <Card.Content>
-                <Header>Member Details</Header>
-
-                <Card.Header>{name}</Card.Header>
-
-                <Card.Description>
-                  <span style={{ paddingRight: '3em ' }}>
-                    <Icon name="mobile alternate" /> {mobile}
-                  </span>
-
-                  <span style={{ paddingRight: '3em ' }}>Savings: Rs. {totalSaving}</span>
-                </Card.Description>
-              </Card.Content>
-
-              <Card.Content extra>
-                <Button size="small" color="green" disabled={this.state.isDisabled} onClick={this.toggleDepositForm}>
-                  Add Deposit
-                </Button>
-              </Card.Content>
-            </Card>
-          </Card.Group>
-        </div>
+        <ShowCard
+          name={name}
+          mobile={mobile}
+          totalSaving={totalSaving}
+          toggleDepositForm={this.toggleDepositForm}
+          openLoanForm={this.openLoanForm}
+          isDisabled={isDisabled}
+        />
 
         <div style={{ margin: '1em' }}>
           <Tab panes={panes} />
         </div>
 
-        {this.state.isShowDeleteDepositModal ? (
+        {isShowDeleteDepositModal ? (
           <ConfirmModal
             header="Deleting deposit!!"
             content={`Are you sure you want to delete this deposit?`}
@@ -130,12 +153,21 @@ class MemberShow extends Component {
           />
         ) : null}
 
-        {this.state.isShowDepositForm ? (
+        {isShowDepositForm ? (
           <DepositForm
             name={this.props.name}
             onClose={this.toggleDepositForm}
             onSubmit={this.submitDeposit}
-            isDisabled={this.state.isDisabled}
+            isDisabled={isDisabled}
+          />
+        ) : null}
+
+        {isShowLoanForm ? (
+          <LoanForm
+            name={this.props.name}
+            onClose={this.toggleLoanForm}
+            onSubmit={this.submitLoan}
+            isDisabled={isDisabled}
           />
         ) : null}
       </>
@@ -143,10 +175,11 @@ class MemberShow extends Component {
   }
 }
 
-const mapStateToProps = ({ members, savings }, ownProps) => {
+const mapStateToProps = ({ members, savings, loans }, ownProps) => {
   const { memberId } = ownProps.match.params;
-  const member = members.find(m => m._id === memberId) || {};
-  const saving = savings.find(s => s.memberId === memberId) || {};
+  const member = members.find((m) => m._id === memberId) || {};
+  const saving = savings.find((s) => s.memberId === memberId) || {};
+  const memberLoans = loans.filter((l) => l.memberId === memberId);
 
   return {
     memberId,
@@ -154,16 +187,16 @@ const mapStateToProps = ({ members, savings }, ownProps) => {
     mobile: member.mobile || 'N/A',
     totalSaving: saving.totalSaving || 0,
     savingId: saving._id || null,
-    deposits: (saving.deposits || []).sort((t1, t2) => (new Date(t1.date) > new Date(t2.date) ? 1 : -1))
+    deposits: (saving.deposits || []).sort((t1, t2) => (new Date(t1.date) > new Date(t2.date) ? 1 : -1)),
+    loans: memberLoans
   };
 };
 
 const mapDispatchToProps = {
   setAlert,
-  upsertSaving
+  upsertSaving,
+  newLoan,
+  upsertLoan
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(MemberShow);
+export default connect(mapStateToProps, mapDispatchToProps)(MemberShow);

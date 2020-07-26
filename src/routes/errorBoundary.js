@@ -1,5 +1,5 @@
-import React, { Component } from "react";
-import { Button } from "semantic-ui-react";
+import React, { Component } from 'react';
+import { Button } from 'semantic-ui-react';
 
 class ErrorBoundary extends Component {
   constructor(props) {
@@ -21,12 +21,7 @@ class ErrorBoundary extends Component {
         <div className="errorPageBody">
           <center>What did you do now? Press that button..</center>
           <center>
-            <Button
-              primary
-              compact
-              content="Reload"
-              onClick={() => window.location.reload()}
-            />
+            <Button as="a" primary compact content="Reload" onClick={() => window.location.reload()} />
           </center>
         </div>
       );

@@ -5,6 +5,7 @@ import Alert from './features/alert';
 
 import { fetchMembers } from './features/members/reducer';
 import { fetchSavings } from './features/savings/reducer';
+import { fetchLoans } from './features/loans/reducer';
 
 import { Routes } from './routes';
 
@@ -12,6 +13,7 @@ class App extends Component {
   componentDidMount = () => {
     this.props.dispatch(fetchMembers());
     this.props.dispatch(fetchSavings());
+    this.props.dispatch(fetchLoans());
   };
 
   render() {
