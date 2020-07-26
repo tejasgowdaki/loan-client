@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { Button, Card, Icon } from 'semantic-ui-react';
+import { Button, Card, Icon, Grid, Label } from 'semantic-ui-react';
 
 import ConfirmModal from '../../common/confirmModal';
 import DepositForm from '../../savings/components/depositForm';
@@ -68,43 +68,66 @@ class MemberCard extends PureComponent {
     const { isDisabled, isShowDeleteModal, isShowDepositForm } = this.state;
 
     return (
-      <>
-        <Card style={{ marginTop: '2em', marginDown: '1em', marginLeft: '2em', marginRight: '2em', minWidth: 370 }}>
-          <Card.Content>
-            <Card.Header>{name}</Card.Header>
+      <Card style={{ width: 'auto' }}>
+        <Card.Content>
+          <Card.Header>{name}</Card.Header>
 
-            <Card.Description>
-              <span style={{ paddingRight: '3em ' }}>
-                <Icon name="mobile alternate" /> {mobile}
-              </span>
+          <Card.Description>
+            <Grid rows={2}>
+              <Grid.Column>
+                <Grid.Row>
+                  <Label style={{ paddingRight: '1.5em ' }}>
+                    <Icon name="mobile alternate" /> {mobile}
+                  </Label>
 
-              <span style={{ paddingRight: '3em ' }}>Savings: Rs. {totalSaving}</span>
-            </Card.Description>
-          </Card.Content>
+                  <Label>Savings: Rs. {totalSaving}</Label>
+                </Grid.Row>
+              </Grid.Column>
+            </Grid>
 
-          <Card.Content extra>
-            <Button size="small" color="green" disabled={isDisabled} onClick={this.toggleDepositForm}>
-              Add Deposit
-            </Button>
+            {/* <span style={{ paddingRight: '3em ' }}>
+              <Icon name="mobile alternate" /> {mobile}
+            </span>
 
-            <Button
-              secondary
-              size="small"
-              onClick={() => toggleForm({ _id: memberId, name, mobile })}
-              disabled={isDisabled}
-            >
-              Edit
-            </Button>
+            <span style={{ paddingRight: '3em ' }}>Savings: Rs. {totalSaving}</span> */}
+          </Card.Description>
+        </Card.Content>
 
-            <Button size="small" color="blue" onClick={this.showMember} disabled={isDisabled}>
-              Show
-            </Button>
+        <Card.Content extra>
+          <Button style={{ margin: '0.3em' }} size="small" color="blue" onClick={this.showMember} disabled={isDisabled}>
+            Show
+          </Button>
 
-            <Button size="small" color="red" onClick={this.toggleDeleteModal} disabled={isDisabled}>
-              Delete
-            </Button>
-          </Card.Content>
-        </Card>
+          <Button
+            style={{ margin: '0.3em' }}
+            secondary
+            size="small"
+            onClick={() => toggleForm({ _id: memberId, name, mobile })}
+            disabled={isDisabled}
+          >
+            Edit
+          </Button>
+
+          {/* <Button
+            style={{ margin: '0.3em' }}
+            size="small"
+            color="red"
+            onClick={this.toggleDeleteModal}
+            disabled={isDisabled}
+          >
+            Delete
+          </Button> */}
+
+          <Button
+            style={{ margin: '0.3em' }}
+            size="small"
+            color="green"
+            disabled={isDisabled}
+            onClick={this.toggleDepositForm}
+          >
+            Add Deposit
+          </Button>
+        </Card.Content>
 
         {isShowDeleteModal ? (
           <ConfirmModal
@@ -123,7 +146,7 @@ class MemberCard extends PureComponent {
             isDisabled={isDisabled}
           />
         ) : null}
-      </>
+      </Card>
     );
   }
 }

@@ -33,31 +33,13 @@ class Mobile extends Component {
 
           <Menu.Item
             as="a"
-            active={this.props.pathname === '/members'}
-            onClick={() => this.props.onClickNavigate('/members')}
+            active={this.props.pathname === '/stats'}
+            onClick={() => this.props.onClickNavigate('/stats')}
           >
-            Members
+            Stats
           </Menu.Item>
 
-          <Menu.Item
-            as="a"
-            active={this.props.pathname === '/loans'}
-            onClick={() => this.props.onClickNavigate('/loans')}
-          >
-            Loans
-          </Menu.Item>
-
-          <Menu.Item
-            as="a"
-            active={this.props.pathname === '/savings'}
-            onClick={() => this.props.onClickNavigate('/savings')}
-          >
-            Savings
-          </Menu.Item>
-
-          <Menu.Item as="a">Log in</Menu.Item>
-
-          <Menu.Item as="a">Sign Up</Menu.Item>
+          <Menu.Item as="a">Log Out</Menu.Item>
         </Sidebar>
 
         <Sidebar.Pusher dimmed={sidebarOpened}>
@@ -67,7 +49,8 @@ class Mobile extends Component {
                 <Menu.Item onClick={this.handleToggle}>
                   <Icon name="sidebar" />
                 </Menu.Item>
-                <Menu.Item as="a" header>
+
+                <Menu.Item as="a" header onClick={() => this.props.onClickNavigate('/')}>
                   Loan Manager
                 </Menu.Item>
               </Menu>

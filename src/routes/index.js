@@ -8,7 +8,7 @@ import PageNotFound from './pageNotFound';
 import ErrorBoundary from './errorBoundary';
 import Layout from '../features/layout';
 
-const Home = lazy(() => import(/* webpackChunkName: 'Home' */ '../features/home'));
+const Stats = lazy(() => import(/* webpackChunkName: 'Home' */ '../features/stats'));
 
 const Members = lazy(() => import(/* webpackChunkName: 'Members' */ '../features/members/containers'));
 const MemberShow = lazy(() => import(/* webpackChunkName: 'Members' */ '../features/members/containers/show.js'));
@@ -24,16 +24,6 @@ export const Routes = () => {
               exact
               render={matchProps => (
                 <Layout {...matchProps}>
-                  <Home {...matchProps} />
-                </Layout>
-              )}
-            />
-
-            <Route
-              path="/members"
-              exact
-              render={matchProps => (
-                <Layout {...matchProps}>
                   <Members {...matchProps} />
                 </Layout>
               )}
@@ -45,6 +35,16 @@ export const Routes = () => {
               render={matchProps => (
                 <Layout {...matchProps}>
                   <MemberShow {...matchProps} />
+                </Layout>
+              )}
+            />
+
+            <Route
+              path="/stats"
+              exact
+              render={matchProps => (
+                <Layout {...matchProps}>
+                  <Stats {...matchProps} />
                 </Layout>
               )}
             />

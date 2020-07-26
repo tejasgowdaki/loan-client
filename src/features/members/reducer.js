@@ -1,13 +1,13 @@
-import createReducer from "../../store/createReducer";
+import createReducer from '../../store/createReducer';
 
-import { getMembers } from "./api.js";
+import { getMembers } from './api.js';
 
-import { setAlert } from "../alert/reducer";
+import { setAlert } from '../alert/reducer';
 
-const SET_MEMBERS = "SET_MEMBERS";
-const NEW_MEMBER = "NEW_MEMBER";
-const UPSERT_MEMBER = "UPSERT_MEMBER";
-const REMOVE_MEMBER = "REMOVE_MEMBER";
+const SET_MEMBERS = 'SET_MEMBERS';
+const NEW_MEMBER = 'NEW_MEMBER';
+const UPSERT_MEMBER = 'UPSERT_MEMBER';
+const REMOVE_MEMBER = 'REMOVE_MEMBER';
 
 export const members = createReducer([], {
   [SET_MEMBERS](state, action) {
@@ -50,10 +50,23 @@ export const fetchMembers = () => {
     } catch (error) {
       dispatch(
         setAlert({
-          type: "Error",
-          message: "Oops! Members rejected the request"
+          type: 'Error',
+          message: 'Oops! Members rejected the request'
         })
       );
     }
   };
+};
+
+// search text
+const SET_SEARCH_TEXT = 'SET_SEARCH_TEXT';
+
+export const searchText = createReducer('', {
+  [SET_SEARCH_TEXT](state, action) {
+    return action.searchText;
+  }
+});
+
+export const setSearchText = searchText => {
+  return { type: SET_SEARCH_TEXT, searchText };
 };

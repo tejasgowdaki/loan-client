@@ -8,14 +8,21 @@ const DepositList = ({ deposits, deleteDeposit, isDisabled }) => {
   return (
     <Card.Group style={{ marginBottom: '2em' }}>
       {deposits.map(({ _id, amount, date }, index) => (
-        <Card key={_id} style={{ minWidth: 330 }}>
+        <Card key={_id} style={{ width: 'auto' }}>
           <Card.Content>
             <Card.Header>
               <Label float="left">{moment(date).format('DD MMMM YYYY')}</Label>
 
               <Label float="right">Rs. {amount}</Label>
 
-              <Button floated="right" size="mini" color="red" onClick={() => deleteDeposit(_id)} disabled={isDisabled}>
+              <Button
+                style={{ marginLeft: '2em' }}
+                floated="right"
+                size="mini"
+                color="red"
+                onClick={() => deleteDeposit(_id)}
+                disabled={isDisabled}
+              >
                 Delete
               </Button>
             </Card.Header>

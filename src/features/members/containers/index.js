@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Card, Header, Segment, Button } from 'semantic-ui-react';
+import { Card, Header, Button, Label, Input, Segment, Grid } from 'semantic-ui-react';
+import debounce from 'lodash/debounce';
 
 import MemberForm from '../components/form';
 import MemberCard from '../components/card';
@@ -8,8 +9,10 @@ import MemberCard from '../components/card';
 import { createMember, updateMember } from '../api.js';
 
 import { setAlert } from '../../alert/reducer';
-import { newMember, upsertMember } from '../reducer';
+import { newMember, upsertMember, setSearchText } from '../reducer';
 import { newSaving } from '../../savings/reducer';
+
+import { searchMembers } from '../../../helpers/members';
 
 class Members extends Component {
   constructor(props) {
@@ -70,24 +73,49 @@ class Members extends Component {
 
   navigateTo = url => this.props.history.push(url);
 
+  handleSearchChange = (e, { value }) => this.props.setSearchText(value);
+
   render() {
     return (
       <>
-        <Segment clearing>
-          <Header as="h3" floated="left">
-            Members
-          </Header>
-          <Header as="h3" floated="right">
-            <Button as="a" size="mini" secondary onClick={this.toggleForm} disabled={this.state.isDisabled}>
-              Add
-            </Button>
-          </Header>
+        <Segment>
+          <Grid rows={2}>
+            <Grid.Column>
+              <Grid.Row>
+                <Header icon>Members</Header>
+
+                <Button
+                  style={{ marginLeft: '2em', marginRight: '2em' }}
+                  as="a"
+                  size="small"
+                  secondary
+                  onClick={this.toggleForm}
+                  disabled={this.state.isDisabled}
+                >
+                  Add Member
+                </Button>
+
+                <Input
+                  icon="search"
+                  placeholder="Search..."
+                  onChange={debounce(this.handleSearchChange, 500, {
+                    leading: true
+                  })}
+                  value={this.props.searchText}
+                />
+              </Grid.Row>
+            </Grid.Column>
+          </Grid>
         </Segment>
 
-        <Card.Group>
-          {this.props.memberIds.map(m => (
-            <MemberCard key={m} memberId={m} toggleForm={this.toggleForm} navigateTo={this.navigateTo} />
-          ))}
+        <Card.Group style={{ margin: '1em' }}>
+          {this.props.memberIds.length ? (
+            this.props.memberIds.map(m => (
+              <MemberCard key={m} memberId={m} toggleForm={this.toggleForm} navigateTo={this.navigateTo} />
+            ))
+          ) : (
+            <Label style={{ margin: '2em' }}>No members found</Label>
+          )}
         </Card.Group>
 
         {this.state.isShowForm ? (
@@ -104,15 +132,17 @@ class Members extends Component {
   }
 }
 
-const mapStateToProps = ({ members }) => ({
-  memberIds: members.map(m => m._id)
+const mapStateToProps = ({ members, searchText }) => ({
+  memberIds: searchMembers(members, searchText).map(m => m._id),
+  searchText
 });
 
 const mapDispatchToProps = {
   setAlert,
   newMember,
   upsertMember,
-  newSaving
+  newSaving,
+  setSearchText
 };
 
 export default connect(

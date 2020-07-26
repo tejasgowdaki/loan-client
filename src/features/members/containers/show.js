@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Card, Icon, Tab, Button } from 'semantic-ui-react';
+import { Card, Icon, Tab, Button, Header } from 'semantic-ui-react';
 
 import ConfirmModal from '../../common/confirmModal';
 import DepositList from '../../savings/components/depositList';
@@ -93,8 +93,10 @@ class MemberShow extends Component {
       <>
         <div style={{ marginDown: '5em' }}>
           <Card.Group>
-            <Card style={{ marginTop: '2em', marginDown: '1em', marginLeft: '2em', marginRight: '2em', minWidth: 370 }}>
+            <Card style={{ marginTop: '2em', marginLeft: '1.5em', width: 'auto' }}>
               <Card.Content>
+                <Header>Member Details</Header>
+
                 <Card.Header>{name}</Card.Header>
 
                 <Card.Description>
@@ -115,7 +117,7 @@ class MemberShow extends Component {
           </Card.Group>
         </div>
 
-        <div style={{ marginTop: '2em', marginDown: '1em', marginLeft: '2em', marginRight: '2em' }}>
+        <div style={{ margin: '1em' }}>
           <Tab panes={panes} />
         </div>
 

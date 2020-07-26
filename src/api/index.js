@@ -1,10 +1,10 @@
-import apiHandler from "./apiHandler";
+import apiHandler from './apiHandler';
 
-const baseUrl = "http://localhost:4000/api";
+const baseUrl = 'http://192.168.1.6:4000/api';
 
 const fetchHeader = () => {
   return {
-    "Content-Type": "application/json"
+    'Content-Type': 'application/json'
     // Authorization: `JWT ${token}`
   };
 };
@@ -12,7 +12,7 @@ const fetchHeader = () => {
 export const get = async url => {
   try {
     const response = await fetch(`${baseUrl}${url}`, {
-      method: "GET",
+      method: 'GET',
       headers: fetchHeader()
     });
 
@@ -25,7 +25,7 @@ export const get = async url => {
 export const post = async (url, payload) => {
   try {
     const response = await fetch(`${baseUrl}${url}`, {
-      method: "POST",
+      method: 'POST',
       headers: fetchHeader(),
       body: JSON.stringify(payload)
     });
@@ -39,7 +39,7 @@ export const post = async (url, payload) => {
 export const put = async (url, payload) => {
   try {
     const response = await fetch(`${baseUrl}${url}`, {
-      method: "PUT",
+      method: 'PUT',
       headers: fetchHeader(),
       body: JSON.stringify(payload)
     });
@@ -53,7 +53,7 @@ export const put = async (url, payload) => {
 export const destroy = async url => {
   try {
     const response = await fetch(`${baseUrl}/${url}`, {
-      method: "DELETE",
+      method: 'DELETE',
       headers: fetchHeader()
     });
 
