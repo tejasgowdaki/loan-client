@@ -16,7 +16,10 @@ const ShowCard = ({ name, mobile, totalSaving, toggleDepositForm, openLoanForm, 
                 <Icon name="mobile alternate" /> {mobile}
               </span>
 
-              <span style={{ paddingRight: '3em ' }}>Savings: Rs. {totalSaving}</span>
+              <span style={{ paddingRight: '3em ' }}>
+                Savings: <Icon name="rupee sign" />
+                {totalSaving}
+              </span>
             </Card.Description>
           </Card.Content>
 

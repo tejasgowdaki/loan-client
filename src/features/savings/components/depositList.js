@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, Button, Label } from 'semantic-ui-react';
+import { Card, Button, Label, Icon } from 'semantic-ui-react';
 import moment from 'moment';
 
 const DepositList = ({ deposits, deleteDeposit, isDisabled }) => {
@@ -11,9 +11,12 @@ const DepositList = ({ deposits, deleteDeposit, isDisabled }) => {
         <Card key={_id} style={{ width: 'auto' }}>
           <Card.Content>
             <Card.Header>
-              <Label float="left">{moment(date).format('DD MMMM YYYY')}</Label>
+              <Label float="left">Date: {moment(date).format('DD MMMM YYYY')}</Label>
 
-              <Label float="right">Rs. {amount}</Label>
+              <Label float="right">
+                Amount: <Icon name="rupee sign" />
+                {amount}
+              </Label>
 
               <Button
                 as="a"
