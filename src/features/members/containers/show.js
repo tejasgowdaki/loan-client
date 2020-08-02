@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Tab, Icon } from 'semantic-ui-react';
+import { Tab } from 'semantic-ui-react';
 
 import ConfirmModal from '../../common/confirmModal';
 import DepositList from '../../savings/components/depositList';
@@ -132,7 +132,6 @@ class MemberShow extends Component {
     const { name, mobile, totalSaving, deposits, loans } = this.props;
     const {
       isDisabled,
-      formLoan,
       isShowDeleteDepositModal,
       isShowDepositForm,
       isShowLoanForm,
