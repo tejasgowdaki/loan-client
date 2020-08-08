@@ -1,7 +1,7 @@
 import apiHandler from './apiHandler';
 
-const baseUrl = 'http://localhost:4000/api';
-// const baseUrl = 'http://192.168.43.16:4000/api';
+// const baseUrl = 'http://localhost:4000/api';
+const baseUrl = 'http://192.168.1.4:4000/api';
 
 const fetchHeader = () => {
   return {
@@ -10,7 +10,7 @@ const fetchHeader = () => {
   };
 };
 
-export const get = async url => {
+export const get = async (url) => {
   try {
     const response = await fetch(`${baseUrl}${url}`, {
       method: 'GET',
@@ -51,7 +51,7 @@ export const put = async (url, payload) => {
   }
 };
 
-export const destroy = async url => {
+export const destroy = async (url) => {
   try {
     const response = await fetch(`${baseUrl}/${url}`, {
       method: 'DELETE',
