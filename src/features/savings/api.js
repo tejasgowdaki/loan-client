@@ -1,6 +1,6 @@
-import { get, post } from "../../api/index";
+import { get, post } from '../../api/index';
 
-const url = "/savings";
+const url = '/savings';
 
 export const getSavings = async () => {
   try {
@@ -14,15 +14,6 @@ export const getSavings = async () => {
 export const addDeposit = async (id, deposit) => {
   try {
     const response = await post(`${url}/add/${id}`, deposit);
-    return response.saving;
-  } catch (error) {
-    throw error;
-  }
-};
-
-export const updateDeposit = async (id, deposit) => {
-  try {
-    const response = await post(`${url}/update/${id}`, deposit);
     return response.saving;
   } catch (error) {
     throw error;

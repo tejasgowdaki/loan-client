@@ -2,12 +2,12 @@ import React from 'react';
 import { Card, Button, Label, Icon } from 'semantic-ui-react';
 import moment from 'moment';
 
-const DepositList = ({ deposits, deleteDeposit, isDisabled }) => {
-  if (!deposits.length) return <div>No deposits found</div>;
+const PaymentList = ({ payments, deletePayment, isDisabled }) => {
+  if (!payments.length) return <div>No payments found</div>;
 
   return (
     <Card.Group style={{ marginBottom: '2em' }}>
-      {deposits.map(({ _id, amount, date }, index) => (
+      {payments.map(({ _id, amount, interest = 0, date }, index) => (
         <Card key={_id} style={{ width: 'auto' }}>
           <Card.Content>
             <Card.Header style={{ margin: '1em' }}>
@@ -19,10 +19,10 @@ const DepositList = ({ deposits, deleteDeposit, isDisabled }) => {
                 floated="right"
                 size="mini"
                 color="red"
-                onClick={() => deleteDeposit(_id)}
+                onClick={() => deletePayment(_id)}
                 disabled={isDisabled}
               >
-                Delete Deposit
+                Delete Payment
               </Button>
             </Card.Header>
 
@@ -33,6 +33,16 @@ const DepositList = ({ deposits, deleteDeposit, isDisabled }) => {
                 Amount: <Icon name="rupee sign" />
                 {amount}
               </Label>
+
+              <Label style={{ margin: '0.25em' }}>
+                Interest: <Icon name="rupee sign" />
+                {interest}
+              </Label>
+
+              <Label style={{ margin: '0.25em' }}>
+                Total: <Icon name="rupee sign" />
+                {amount + interest}
+              </Label>
             </Card.Header>
           </Card.Content>
         </Card>
@@ -41,4 +51,4 @@ const DepositList = ({ deposits, deleteDeposit, isDisabled }) => {
   );
 };
 
-export default DepositList;
+export default PaymentList;

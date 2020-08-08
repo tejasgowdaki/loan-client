@@ -24,7 +24,7 @@ class MemberCard extends PureComponent {
 
   toggleDeleteModal = () => this.setState({ isShowDeleteModal: !this.state.isShowDeleteModal });
 
-  confirmDelete = async e => {
+  confirmDelete = async (e) => {
     try {
       e.preventDefault();
       this.setState({ isDisabled: true });
@@ -79,23 +79,17 @@ class MemberCard extends PureComponent {
             <Grid rows={2}>
               <Grid.Column>
                 <Grid.Row>
-                  <Label style={{ paddingRight: '1.5em ' }}>
+                  <Label style={{ margin: '0.25em' }}>
                     <Icon name="mobile alternate" /> {mobile}
                   </Label>
 
-                  <Label>
+                  <Label style={{ margin: '0.25em' }}>
                     Savings: <Icon name="rupee sign" />
                     {totalSaving}
                   </Label>
                 </Grid.Row>
               </Grid.Column>
             </Grid>
-
-            {/* <span style={{ paddingRight: '3em ' }}>
-              <Icon name="mobile alternate" /> {mobile}
-            </span>
-
-            <span style={{ paddingRight: '3em ' }}>Savings: <Icon name="rupee sign" />{totalSaving}</span> */}
           </Card.Description>
         </Card.Content>
 
@@ -168,8 +162,8 @@ class MemberCard extends PureComponent {
 }
 
 const mapStateToProps = ({ members, savings }, { memberId }) => {
-  const member = members.find(m => m._id === memberId) || {};
-  const saving = savings.find(s => s.memberId === memberId) || {};
+  const member = members.find((m) => m._id === memberId) || {};
+  const saving = savings.find((s) => s.memberId === memberId) || {};
 
   return {
     name: member.name || 'N/A',
@@ -185,7 +179,4 @@ const mapDispatchToProps = {
   upsertSaving
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(MemberCard);
+export default connect(mapStateToProps, mapDispatchToProps)(MemberCard);

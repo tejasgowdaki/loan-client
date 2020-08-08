@@ -41,14 +41,6 @@ class Mobile extends Component {
 
           <Menu.Item
             as="a"
-            active={this.props.pathname === '/loans'}
-            onClick={() => this.props.onClickNavigate('/loans')}
-          >
-            Loans
-          </Menu.Item>
-
-          <Menu.Item
-            as="a"
             active={this.props.pathname === '/stats'}
             onClick={() => this.props.onClickNavigate('/stats')}
           >

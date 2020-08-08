@@ -10,7 +10,7 @@ import ShowCard from '../components/showCard';
 import LoanList from '../../loans/components/loanList';
 
 import { addDeposit, deleteDeposit } from '../../savings/api';
-import { createLoan, updateLoan, deleteLoan } from '../../loans/api';
+import { createLoan, updateLoan } from '../../loans/api';
 
 import { setAlert } from '../../alert/reducer';
 import { upsertSaving } from '../../savings/reducer';
@@ -25,17 +25,15 @@ class MemberShow extends Component {
       deleteDepositId: null,
       isShowDepositForm: false,
       isShowLoanForm: false,
-      formLoan: null,
-      isShowDeleteLoanModal: false,
-      deleteLoanId: null
+      formLoan: null
     };
   }
 
-  promptDepositDelete = deleteDepositId => this.setState({ isShowDeleteDepositModal: true, deleteDepositId });
+  promptDepositDelete = (deleteDepositId) => this.setState({ isShowDeleteDepositModal: true, deleteDepositId });
 
   closeDeleteDepositModal = () => this.setState({ isShowDeleteDepositModal: false, deleteDepositId: null });
 
-  confirmDeleteDeposit = async e => {
+  confirmDeleteDeposit = async (e) => {
     try {
       e.preventDefault();
       this.setState({ isDisabled: true });
@@ -79,13 +77,13 @@ class MemberShow extends Component {
 
   closeLoanForm = () => this.setState({ isShowLoanForm: false, formLoan: null });
 
-  submitLoan = async amount => {
+  submitLoan = async (amount, date) => {
     try {
       this.setState({ isDisabled: true });
 
       if (this.state.formLoan) {
         // update
-        const loan = await updateLoan(this.state.formLoan._id, { memberId: this.props.memberId, amount });
+        const loan = await updateLoan(this.state.formLoan._id, { memberId: this.props.memberId, amount, date });
         this.props.upsertLoan(loan);
         this.props.setAlert({
           type: 'Success',
@@ -93,7 +91,7 @@ class MemberShow extends Component {
         });
       } else {
         // create
-        const loan = await createLoan({ memberId: this.props.memberId, amount });
+        const loan = await createLoan({ memberId: this.props.memberId, amount, date });
         this.props.newLoan(loan);
         this.props.setAlert({
           type: 'Success',
@@ -108,42 +106,16 @@ class MemberShow extends Component {
     }
   };
 
-  promptLoanDelete = deleteLoanId => this.setState({ isShowDeleteLoanModal: true, deleteLoanId });
-
-  closeDeleteLoanModal = () => this.setState({ isShowDeleteLoanModal: false, deleteLoanId: null });
-
-  confirmDeleteLoan = async e => {
-    try {
-      e.preventDefault();
-      this.setState({ isDisabled: true });
-
-      const loanId = await deleteLoan(this.state.deleteLoanId);
-      this.props.removeLoan(loanId);
-      this.props.setAlert({ type: 'Success', message: 'Successfully deleted loan' });
-
-      this.setState({ isShowDeleteLoanModal: false, deleteLoanId: null, isDisabled: false });
-    } catch (error) {
-      this.props.setAlert({ type: 'Error', message: error.message });
-      this.setState({ isDisabled: false });
-    }
-  };
-
   render() {
     const { name, mobile, totalSaving, deposits, loans } = this.props;
-    const {
-      isDisabled,
-      isShowDeleteDepositModal,
-      isShowDepositForm,
-      isShowLoanForm,
-      isShowDeleteLoanModal
-    } = this.state;
+    const { isDisabled, isShowDeleteDepositModal, isShowDepositForm, isShowLoanForm } = this.state;
 
     const panes = [
       {
         menuItem: 'Loan',
         render: () => (
           <Tab.Pane>
-            <LoanList loans={loans} isDisabled={isDisabled} deleteLoan={this.promptLoanDelete} />
+            <LoanList loans={loans} />
           </Tab.Pane>
         )
       },
@@ -198,15 +170,6 @@ class MemberShow extends Component {
             isDisabled={isDisabled}
           />
         ) : null}
-
-        {isShowDeleteLoanModal ? (
-          <ConfirmModal
-            header="Deleting loan!!"
-            content={`Are you sure you want to delete this loan?`}
-            onClickSubmit={this.confirmDeleteLoan}
-            onClickCancel={this.closeDeleteLoanModal}
-          />
-        ) : null}
       </>
     );
   }
@@ -214,9 +177,9 @@ class MemberShow extends Component {
 
 const mapStateToProps = ({ members, savings, loans }, ownProps) => {
   const { memberId } = ownProps.match.params;
-  const member = members.find(m => m._id === memberId) || {};
-  const saving = savings.find(s => s.memberId === memberId) || {};
-  const memberLoans = loans.filter(l => l.memberId === memberId);
+  const member = members.find((m) => m._id === memberId) || {};
+  const saving = savings.find((s) => s.memberId === memberId) || {};
+  const memberLoans = loans.filter((l) => l.memberId === memberId);
 
   return {
     memberId,
@@ -237,7 +200,4 @@ const mapDispatchToProps = {
   removeLoan
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(MemberShow);
+export default connect(mapStateToProps, mapDispatchToProps)(MemberShow);

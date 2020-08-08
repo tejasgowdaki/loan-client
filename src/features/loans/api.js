@@ -37,3 +37,21 @@ export const deleteLoan = async (id) => {
     throw error;
   }
 };
+
+export const addPayment = async (id, payment) => {
+  try {
+    const response = await post(`${url}/add/${id}`, payment);
+    return response.loan;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const deletePayment = async (id, payment) => {
+  try {
+    const response = await post(`${url}/delete/${id}`, payment);
+    return response.loan;
+  } catch (error) {
+    throw error;
+  }
+};

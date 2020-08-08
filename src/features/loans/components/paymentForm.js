@@ -4,9 +4,10 @@ import SemanticDatepicker from 'react-semantic-ui-datepickers';
 
 import FormModal from '../../common/formModal';
 
-const LoanForm = ({ name, onClose, onSubmit, isDisabled, loan = null }) => {
-  const [amount, setAmount] = useState(loan ? loan.amount : 0);
-  const [date, setDate] = useState(loan ? loan.date : null);
+const PaymentForm = ({ name, onClose, onSubmit, isDisabled }) => {
+  const [amount, setAmount] = useState(0);
+  const [interest, setInterest] = useState(0);
+  const [date, setDate] = useState(null);
   const [amountError, setAmountError] = useState('');
   const [dateError, setDateError] = useState('');
 
@@ -14,6 +15,11 @@ const LoanForm = ({ name, onClose, onSubmit, isDisabled, loan = null }) => {
     const value = +event.target.value;
     setAmount(value);
     setAmountError(value ? '' : 'Please enter amount');
+  };
+
+  const onChangeInterest = (event) => {
+    const value = +event.target.value;
+    setInterest(value);
   };
 
   const onChangeDate = (event, data) => {
@@ -25,6 +31,7 @@ const LoanForm = ({ name, onClose, onSubmit, isDisabled, loan = null }) => {
   const validate = () => {
     setAmountError(amount ? '' : 'Please enter amount');
     setDateError(date ? '' : 'Please enter date');
+
     return amount && date;
   };
 
@@ -33,17 +40,11 @@ const LoanForm = ({ name, onClose, onSubmit, isDisabled, loan = null }) => {
 
     const isValid = validate();
     if (!isValid) return true;
-
-    onSubmit(amount, date);
+    onSubmit(amount, interest, date);
   };
 
   return (
-    <FormModal
-      header={loan ? `Update loan for ${name}` : `Create new loan for ${name}`}
-      onClose={onClose}
-      onSubmit={submitForm}
-      isDisabled={isDisabled}
-    >
+    <FormModal header={`Loan payment for ${name}`} onClose={onClose} onSubmit={submitForm} isDisabled={isDisabled}>
       <Form>
         <Form.Group widths="equal">
           <Form.Field fluid="true" required>
@@ -60,6 +61,20 @@ const LoanForm = ({ name, onClose, onSubmit, isDisabled, loan = null }) => {
             />
 
             <span style={{ color: 'red' }}>{amountError}</span>
+          </Form.Field>
+
+          <Form.Field fluid="true" required>
+            <label>Interest</label>
+
+            <input
+              autoComplete="off"
+              placeholder="Interest"
+              name="interest"
+              value={interest}
+              onChange={onChangeInterest}
+              disabled={isDisabled}
+              style={{ maxWidth: '300px' }}
+            />
           </Form.Field>
 
           <Form.Field fluid required className="date-picker" id="date-picker">
@@ -82,4 +97,4 @@ const LoanForm = ({ name, onClose, onSubmit, isDisabled, loan = null }) => {
   );
 };
 
-export default LoanForm;
+export default PaymentForm;
