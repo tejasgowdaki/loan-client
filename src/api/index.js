@@ -1,7 +1,7 @@
 import apiHandler from './apiHandler';
 
-// const baseUrl = 'http://localhost:4000/api';
-const baseUrl = 'http://192.168.1.4:4000/api';
+const baseUrl = 'http://localhost:4000/api';
+// const baseUrl = 'http://192.168.1.16:4000/api';
 
 const fetchHeader = () => {
   return {
