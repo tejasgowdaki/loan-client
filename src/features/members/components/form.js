@@ -4,6 +4,7 @@ import { Form } from 'semantic-ui-react';
 import FormModal from '../../common/formModal';
 
 const MemberForm = ({
+  header,
   member: { _id = null, name = '', mobile = '' },
   updateMember,
   onClose,
@@ -13,11 +14,11 @@ const MemberForm = ({
   const [nameError, setNameError] = useState('');
   const [mobileError, setMobileError] = useState('');
 
-  const onChangeName = event => {
+  const onChangeName = (event) => {
     updateMember('name', event.target.value);
   };
 
-  const onChangeMobile = event => {
+  const onChangeMobile = (event) => {
     if (event.target.value.length > 10) return;
     updateMember('mobile', event.target.value);
   };
@@ -29,26 +30,21 @@ const MemberForm = ({
     );
   };
 
-  const submitForm = e => {
+  const submitForm = (e) => {
     validate();
     onSubmit(e);
   };
 
   return (
-    <FormModal
-      header={_id ? 'Update Member' : 'Create Member'}
-      onClose={onClose}
-      onSubmit={submitForm}
-      isDisabled={isDisabled}
-    >
+    <FormModal header={header} onClose={onClose} onSubmit={submitForm} isDisabled={isDisabled}>
       <Form>
-        <Form.Group widths='equal'>
+        <Form.Group widths="equal">
           <Form.Field fluid required>
             <label>Name</label>
             <input
-              autoComplete='off'
-              placeholder='Name'
-              name='name'
+              autoComplete="off"
+              placeholder="Name"
+              name="name"
               value={name}
               onChange={onChangeName}
               disabled={isDisabled}
@@ -59,10 +55,10 @@ const MemberForm = ({
           <Form.Field fluid required>
             <label>Mobile</label>
             <input
-              autoComplete='off'
-              type='number'
-              placeholder='Mobile'
-              name='mobile'
+              autoComplete="off"
+              type="number"
+              placeholder="Mobile"
+              name="mobile"
               value={mobile}
               onChange={onChangeMobile}
               disabled={isDisabled}

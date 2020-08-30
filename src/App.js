@@ -6,24 +6,55 @@ import Alert from './features/alert';
 import { fetchMembers } from './features/members/reducer';
 import { fetchSavings } from './features/savings/reducer';
 import { fetchLoans } from './features/loans/reducer';
+import { setAccount } from './features/account/reducer';
+
+import { fetchAccountFromToken } from './helpers/auth';
 
 import { Routes } from './routes';
+import { AuthRoutes } from './routes/auth';
 
 class App extends Component {
   componentDidMount = () => {
-    this.props.dispatch(fetchMembers());
-    this.props.dispatch(fetchSavings());
-    this.props.dispatch(fetchLoans());
+    const token = localStorage.getItem('XFLK');
+
+    if (token) {
+      const account = fetchAccountFromToken(token);
+      this.props.setAccount({ ...account, token });
+      this.fetchData();
+    }
+  };
+
+  componentDidUpdate(prevProps) {
+    if (!prevProps.isActiveSession && this.props.isActiveSession) this.fetchData();
+  }
+
+  fetchData = () => {
+    this.props.fetchMembers();
+    this.props.fetchSavings();
+    this.props.fetchLoans();
+  };
+
+  logout = async () => {
+    try {
+      this.props.setAccount(null);
+      localStorage.removeItem('XFLK');
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   render() {
     return (
       <Fragment>
         <Alert />
-        <Routes />
+        {this.props.isActiveSession ? <Routes name={this.props.name} logout={this.logout} /> : <AuthRoutes />}
       </Fragment>
     );
   }
 }
 
-export default connect()(App);
+const mapStateToProps = ({ account }) => ({ isActiveSession: !!account, name: (account || {}).name });
+
+const mapDispatchToProps = { fetchMembers, fetchSavings, fetchLoans, setAccount };
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);

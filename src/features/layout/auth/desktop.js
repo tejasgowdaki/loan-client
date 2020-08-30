@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Responsive, Button, Container, Menu, Segment, Visibility } from 'semantic-ui-react';
+import { Responsive, Container, Menu, Segment, Visibility } from 'semantic-ui-react';
 
 const getWidth = () => {
   const isSSR = typeof window === 'undefined';
@@ -15,7 +15,7 @@ class Desktop extends Component {
   showFixedMenu = () => this.setState({ fixed: true });
 
   render() {
-    const { children, name = '', pathname, onClickNavigate, logout } = this.props;
+    const { children } = this.props;
     const { fixed } = this.state;
 
     return (
@@ -24,22 +24,8 @@ class Desktop extends Component {
           <Segment inverted textAlign="center" style={{ minHeight: 70, padding: '1em 0em' }} vertical>
             <Menu fixed={fixed ? 'top' : null} inverted={!fixed} pointing={!fixed} secondary={!fixed} size="large">
               <Container>
-                <Menu.Item as="a" header onClick={() => onClickNavigate('/')}>
-                  {name || 'Loan Manager'}
-                </Menu.Item>
-
-                <Menu.Item as="a" active={pathname === '/members'} onClick={() => onClickNavigate('/members')}>
-                  Members
-                </Menu.Item>
-
-                <Menu.Item as="a" active={pathname === '/stats'} onClick={() => onClickNavigate('/stats')}>
-                  Stats
-                </Menu.Item>
-
-                <Menu.Item position="right">
-                  <Button as="a" inverted={!fixed} onClick={logout}>
-                    Log Out
-                  </Button>
+                <Menu.Item as="a" header>
+                  Loan Manager
                 </Menu.Item>
               </Container>
             </Menu>

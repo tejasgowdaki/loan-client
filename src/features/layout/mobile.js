@@ -16,7 +16,7 @@ class Mobile extends Component {
   handleToggle = () => this.setState({ sidebarOpened: true });
 
   render() {
-    const { children } = this.props;
+    const { children, name = '', pathname, onClickNavigate, logout } = this.props;
     const { sidebarOpened } = this.state;
 
     return (
@@ -27,27 +27,21 @@ class Mobile extends Component {
         style={{ height: '100vh' }}
       >
         <Sidebar as={Menu} animation="push" inverted onHide={this.handleSidebarHide} vertical visible={sidebarOpened}>
-          <Menu.Item as="a" active={this.props.pathname === '/'} onClick={() => this.props.onClickNavigate('/')}>
+          <Menu.Item as="a" active={pathname === '/'} onClick={() => onClickNavigate('/')}>
             Home
           </Menu.Item>
 
-          <Menu.Item
-            as="a"
-            active={this.props.pathname === '/members'}
-            onClick={() => this.props.onClickNavigate('/members')}
-          >
+          <Menu.Item as="a" active={pathname === '/members'} onClick={() => onClickNavigate('/members')}>
             Members
           </Menu.Item>
 
-          <Menu.Item
-            as="a"
-            active={this.props.pathname === '/stats'}
-            onClick={() => this.props.onClickNavigate('/stats')}
-          >
+          <Menu.Item as="a" active={pathname === '/stats'} onClick={() => onClickNavigate('/stats')}>
             Stats
           </Menu.Item>
 
-          <Menu.Item as="a">Log Out</Menu.Item>
+          <Menu.Item as="a" onClick={logout}>
+            Log Out
+          </Menu.Item>
         </Sidebar>
 
         <Sidebar.Pusher dimmed={sidebarOpened}>
@@ -58,8 +52,8 @@ class Mobile extends Component {
                   <Icon name="sidebar" />
                 </Menu.Item>
 
-                <Menu.Item as="a" header onClick={() => this.props.onClickNavigate('/')}>
-                  Loan Manager
+                <Menu.Item as="a" header onClick={() => onClickNavigate('/')}>
+                  {name || 'Loan Manager'}
                 </Menu.Item>
               </Menu>
             </Container>

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Modal, Button, Icon } from 'semantic-ui-react';
 
-const FormModal = ({ header, onClose, onSubmit, isDisabled, children }) => (
+const FormModal = ({ header, onClose, onSubmit, isDisabled, children, submitLabel = 'Submit' }) => (
   <Modal open centered={false}>
     <Modal.Header>
       <span style={{ paddingRight: '3em ' }}>{header}</span>
@@ -16,7 +16,7 @@ const FormModal = ({ header, onClose, onSubmit, isDisabled, children }) => (
         <Icon name="remove" /> Cancel
       </Button>
       <Button as="a" color="green" onClick={onSubmit} inverted disabled={isDisabled}>
-        <Icon name="checkmark" /> Submit
+        <Icon name="checkmark" /> {submitLabel}
       </Button>
     </Modal.Actions>
   </Modal>

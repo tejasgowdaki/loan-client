@@ -1,21 +1,18 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React from 'react';
+import PropTypes from 'prop-types';
 
-import Desktop from "./desktop";
-import Mobile from "./mobile";
+import Desktop from './desktop';
+import Mobile from './mobile';
 
-const Layout = ({ children, history, location }) => {
-  const onClickNavigate = page => history.push(page);
+const Layout = ({ name, logout, children, history, location }) => {
+  const onClickNavigate = (page) => history.push(page);
 
   return (
     <div>
-      <Desktop onClickNavigate={onClickNavigate} pathname={location.pathname}>
+      <Desktop name={name} onClickNavigate={onClickNavigate} pathname={location.pathname} logout={logout}>
         {children}
       </Desktop>
-      <Mobile
-        onClickNavigate={onClickNavigate}
-        pathname={location.pathname}
-      >
+      <Mobile name={name} onClickNavigate={onClickNavigate} pathname={location.pathname} logout={logout}>
         {children}
       </Mobile>
     </div>

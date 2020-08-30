@@ -1,14 +1,17 @@
-const apiHandler = async response => {
-  try {
-    if (response === null || response === undefined)
-      throw new Error("Request error");
+import store from '../store';
 
-    if (response.status >= 200 && response.status < 400)
-      return await response.json();
+import { setAccount } from '../features/account/reducer';
+
+const apiHandler = async (response) => {
+  try {
+    if (response === null || response === undefined) throw new Error('Request error');
+
+    if (response.status >= 200 && response.status < 400) return await response.json();
 
     if (response.status === 401) {
       // logout user
-      console.log("Logout user");
+      store.dispatch(setAccount(null));
+      localStorage.removeItem('XFLK');
     }
 
     //   throw error for other response

@@ -16,7 +16,7 @@ const Loans = lazy(() => import(/* webpackChunkName: 'Loans' */ '../features/loa
 
 const Stats = lazy(() => import(/* webpackChunkName: 'Home' */ '../features/stats'));
 
-export const Routes = () => {
+export const Routes = (props) => {
   return (
     <BrowserRouter>
       <ErrorBoundary>
@@ -26,7 +26,7 @@ export const Routes = () => {
               path="/"
               exact
               render={(matchProps) => (
-                <Layout {...matchProps}>
+                <Layout {...props} {...matchProps}>
                   <Members {...matchProps} />
                 </Layout>
               )}
@@ -36,7 +36,7 @@ export const Routes = () => {
               path="/members"
               exact
               render={(matchProps) => (
-                <Layout {...matchProps}>
+                <Layout {...props} {...matchProps}>
                   <Members {...matchProps} />
                 </Layout>
               )}
@@ -46,7 +46,7 @@ export const Routes = () => {
               path="/members/:memberId"
               exact
               render={(matchProps) => (
-                <Layout {...matchProps}>
+                <Layout {...props} {...matchProps}>
                   <MemberShow {...matchProps} />
                 </Layout>
               )}
@@ -56,7 +56,7 @@ export const Routes = () => {
               path="/loans"
               exact
               render={(matchProps) => (
-                <Layout {...matchProps}>
+                <Layout {...props} {...matchProps}>
                   <Loans {...matchProps} />
                 </Layout>
               )}
@@ -66,7 +66,7 @@ export const Routes = () => {
               path="/stats"
               exact
               render={(matchProps) => (
-                <Layout {...matchProps}>
+                <Layout {...props} {...matchProps}>
                   <Stats {...matchProps} />
                 </Layout>
               )}
