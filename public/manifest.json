@@ -3,9 +3,10 @@
   "name": "Loan Manager",
   "icons": [
     {
-      "src": "/images/loan-512.png",
+      "src": "images/loan-512.png",
       "sizes": "512x512",
-      "type": "image/x-icon"
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ],
   "start_url": "/",
