@@ -2,8 +2,7 @@ import store from '../store';
 
 import apiHandler from './apiHandler';
 
-const baseUrl = 'http://localhost:4000/api';
-// const baseUrl = 'http://192.168.1.16:4000/api';
+const baseUrl = process.env.REACT_APP_BASE_URL;
 
 const fetchHeader = () => {
   const account = store.getState().account;
