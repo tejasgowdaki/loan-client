@@ -36,7 +36,7 @@ class Members extends Component {
     return true;
   };
 
-  onSubmit = async e => {
+  onSubmit = async (e) => {
     try {
       e.preventDefault();
 
@@ -71,7 +71,7 @@ class Members extends Component {
     }
   };
 
-  navigateTo = url => this.props.history.push(url);
+  navigateTo = (url) => this.props.history.push(url);
 
   handleSearchChange = (e, { value }) => this.props.setSearchText(value);
 
@@ -110,7 +110,7 @@ class Members extends Component {
 
         <Card.Group style={{ margin: '1em' }}>
           {this.props.memberIds.length ? (
-            this.props.memberIds.map(m => (
+            this.props.memberIds.map((m) => (
               <MemberCard key={m} memberId={m} toggleForm={this.toggleForm} navigateTo={this.navigateTo} />
             ))
           ) : (
@@ -120,6 +120,7 @@ class Members extends Component {
 
         {this.state.isShowForm ? (
           <MemberForm
+            header={this.state.member && this.state.member._id ? 'Update Member' : 'Create Member'}
             member={this.state.member}
             updateMember={this.updateMember}
             onClose={this.toggleForm}
@@ -133,7 +134,7 @@ class Members extends Component {
 }
 
 const mapStateToProps = ({ members, searchText }) => ({
-  memberIds: searchMembers(members, searchText).map(m => m._id),
+  memberIds: searchMembers(members, searchText).map((m) => m._id),
   searchText
 });
 
@@ -145,7 +146,4 @@ const mapDispatchToProps = {
   setSearchText
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Members);
+export default connect(mapStateToProps, mapDispatchToProps)(Members);

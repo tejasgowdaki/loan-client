@@ -1,12 +1,16 @@
+import store from '../store';
+
 import apiHandler from './apiHandler';
 
 const baseUrl = 'http://localhost:4000/api';
 // const baseUrl = 'http://192.168.1.16:4000/api';
 
 const fetchHeader = () => {
+  const account = store.getState().account;
+
   return {
-    'Content-Type': 'application/json'
-    // Authorization: `JWT ${token}`
+    'Content-Type': 'application/json',
+    'x-auth-token': account ? account.token : null
   };
 };
 
