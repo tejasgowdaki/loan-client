@@ -67,7 +67,7 @@ class MemberCard extends PureComponent {
   showMember = () => this.props.navigateTo(`/members/${this.props.memberId}`);
 
   render() {
-    const { memberId, name, mobile, totalSaving, toggleForm } = this.props;
+    const { memberId, name, mobile, totalSaving, toggleForm, remainingLoanAmount } = this.props;
     const { isDisabled, isShowDeleteModal, isShowDepositForm } = this.state;
 
     return (
@@ -86,6 +86,11 @@ class MemberCard extends PureComponent {
                   <Label style={{ margin: '0.25em' }}>
                     Savings: <Icon name="rupee sign" />
                     {totalSaving}
+                  </Label>
+
+                  <Label style={{ margin: '0.25em' }}>
+                    Outstanding loan amount: <Icon name="rupee sign" />
+                    {remainingLoanAmount}
                   </Label>
                 </Grid.Row>
               </Grid.Column>
@@ -161,14 +166,17 @@ class MemberCard extends PureComponent {
   }
 }
 
-const mapStateToProps = ({ members, savings }, { memberId }) => {
+const mapStateToProps = ({ members, savings, loans }, { memberId }) => {
   const member = members.find((m) => m._id === memberId) || {};
   const saving = savings.find((s) => s.memberId === memberId) || {};
+  const inCompleteLoans = loans.filter((l) => !l.isCompleted && l.memberId === memberId);
+  const remainingLoanAmount = inCompleteLoans.reduce((sum, l) => (sum += l.amount - l.paidAmount), 0);
 
   return {
     name: member.name || 'N/A',
     mobile: member.mobile || 'N/A',
     totalSaving: saving.totalSaving || 0,
+    remainingLoanAmount: remainingLoanAmount || 0,
     savingId: saving._id || null
   };
 };

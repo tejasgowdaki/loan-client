@@ -107,7 +107,7 @@ class MemberShow extends Component {
   };
 
   render() {
-    const { name, mobile, totalSaving, deposits, loans } = this.props;
+    const { name, mobile, totalSaving, deposits, loans, remainingLoanAmount } = this.props;
     const { isDisabled, isShowDeleteDepositModal, isShowDepositForm, isShowLoanForm } = this.state;
 
     const panes = [
@@ -135,6 +135,7 @@ class MemberShow extends Component {
           name={name}
           mobile={mobile}
           totalSaving={totalSaving}
+          remainingLoanAmount={remainingLoanAmount}
           toggleDepositForm={this.toggleDepositForm}
           openLoanForm={this.openLoanForm}
           isDisabled={isDisabled}
@@ -180,6 +181,8 @@ const mapStateToProps = ({ members, savings, loans }, ownProps) => {
   const member = members.find((m) => m._id === memberId) || {};
   const saving = savings.find((s) => s.memberId === memberId) || {};
   const memberLoans = loans.filter((l) => l.memberId === memberId);
+  const inCompleteLoans = memberLoans.filter((l) => !l.isCompleted);
+  const remainingLoanAmount = inCompleteLoans.reduce((sum, l) => (sum += l.amount - l.paidAmount), 0);
 
   return {
     memberId,
@@ -188,7 +191,8 @@ const mapStateToProps = ({ members, savings, loans }, ownProps) => {
     totalSaving: saving.totalSaving || 0,
     savingId: saving._id || null,
     deposits: (saving.deposits || []).sort((t1, t2) => (new Date(t1.date) > new Date(t2.date) ? 1 : -1)),
-    loans: memberLoans
+    loans: memberLoans,
+    remainingLoanAmount
   };
 };
 

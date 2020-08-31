@@ -88,7 +88,16 @@ class LoanCard extends PureComponent {
   };
 
   render() {
-    const { index, memberName, loanDate, loanAmount, loanPaidAmount, loanPaidInterest, payments } = this.props;
+    const {
+      index,
+      memberName,
+      loanDate,
+      loanAmount,
+      loanPaidAmount,
+      loanPaidInterest,
+      payments,
+      isCompleted
+    } = this.props;
     const {
       isDisabled,
       isShowDeleteLoanModal,
@@ -106,7 +115,7 @@ class LoanCard extends PureComponent {
 
               <Button
                 as="a"
-                style={{ marginLeft: '2em' }}
+                style={{ marginLeft: '.2em' }}
                 floated="right"
                 size="mini"
                 color="red"
@@ -116,17 +125,23 @@ class LoanCard extends PureComponent {
                 Delete Loan
               </Button>
 
-              <Button
-                as="a"
-                style={{ marginLeft: '2em' }}
-                floated="right"
-                size="mini"
-                color="blue"
-                onClick={this.togglePaymentForm}
-                disabled={isDisabled}
-              >
-                Pay Instalment
-              </Button>
+              {isCompleted ? (
+                <Button as="a" style={{ marginLeft: '.2em' }} floated="right" size="mini" color="green">
+                  Completed
+                </Button>
+              ) : (
+                <Button
+                  as="a"
+                  style={{ marginLeft: '.2em' }}
+                  floated="right"
+                  size="mini"
+                  color="blue"
+                  onClick={this.togglePaymentForm}
+                  disabled={isDisabled}
+                >
+                  Pay Instalment
+                </Button>
+              )}
             </Card.Header>
 
             <Card.Header style={{ margin: '1em' }}>
@@ -140,6 +155,11 @@ class LoanCard extends PureComponent {
               <Label style={{ margin: '0.25em' }}>
                 Paid: <Icon name="rupee sign" />
                 {loanPaidAmount}
+              </Label>
+
+              <Label style={{ margin: '0.25em' }}>
+                Outstanding amount: <Icon name="rupee sign" />
+                {loanAmount - loanPaidAmount}
               </Label>
 
               <Label style={{ margin: '0.25em' }}>
@@ -204,7 +224,8 @@ const mapStateToProps = ({ members, loans }, { loanId }) => {
     loanAmount: loan.amount || '0',
     loanPaidAmount: loan.paidAmount || '0',
     loanPaidInterest: loan.paidInterest || '0',
-    payments: (loan.payments || []).sort((t1, t2) => (new Date(t1.date) > new Date(t2.date) ? 1 : -1))
+    payments: (loan.payments || []).sort((t1, t2) => (new Date(t1.date) > new Date(t2.date) ? 1 : -1)),
+    isCompleted: loan.isCompleted
   };
 };
 
