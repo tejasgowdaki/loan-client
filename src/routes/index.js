@@ -14,6 +14,8 @@ const MemberShow = lazy(() => import(/* webpackChunkName: 'MemberShow' */ '../fe
 
 const Loans = lazy(() => import(/* webpackChunkName: 'Loans' */ '../features/loans/containers'));
 
+const Transactions = lazy(() => import(/* webpackChunkName: 'Transactions' */ '../features/transaction/containers'));
+
 const Stats = lazy(() => import(/* webpackChunkName: 'Home' */ '../features/stats/containers'));
 
 export const Routes = (props) => {
@@ -58,6 +60,16 @@ export const Routes = (props) => {
               render={(matchProps) => (
                 <Layout {...props} {...matchProps}>
                   <Loans {...matchProps} />
+                </Layout>
+              )}
+            />
+
+            <Route
+              path="/transactions"
+              exact
+              render={(matchProps) => (
+                <Layout {...props} {...matchProps}>
+                  <Transactions {...matchProps} />
                 </Layout>
               )}
             />

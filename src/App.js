@@ -6,6 +6,7 @@ import Alert from './features/alert';
 import { fetchMembers } from './features/members/reducer';
 import { fetchSavings } from './features/savings/reducer';
 import { fetchLoans } from './features/loans/reducer';
+import { fetchTransactions } from './features/transaction/reducer';
 import { setAccount } from './features/account/reducer';
 
 import { fetchAccountFromToken } from './helpers/auth';
@@ -32,6 +33,7 @@ class App extends Component {
     this.props.fetchMembers();
     this.props.fetchSavings();
     this.props.fetchLoans();
+    this.props.fetchTransactions();
   };
 
   logout = async () => {
@@ -55,6 +57,6 @@ class App extends Component {
 
 const mapStateToProps = ({ account }) => ({ isActiveSession: !!account, name: (account || {}).name });
 
-const mapDispatchToProps = { fetchMembers, fetchSavings, fetchLoans, setAccount };
+const mapDispatchToProps = { fetchMembers, fetchSavings, fetchLoans, setAccount, fetchTransactions };
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

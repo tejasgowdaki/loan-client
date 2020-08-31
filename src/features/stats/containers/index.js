@@ -13,6 +13,7 @@ class Stats extends Component {
       members: 0,
       savings: 0,
       loan: { amount: 0, paidAmount: 0, paidInterest: 0 },
+      transaction: { income: 0, expense: 0 },
       isDisabled: false
     };
   }
@@ -24,9 +25,9 @@ class Stats extends Component {
   fetchStats = async () => {
     try {
       this.setState({ isDisabled: true });
-      const { members, savings, loan } = await getStats();
+      const stats = await getStats();
 
-      this.setState({ isDisabled: false, members, savings, loan });
+      this.setState({ isDisabled: false, ...stats });
     } catch (error) {
       this.props.setAlert({ type: 'Error', message: error.message });
       this.setState({ isDisabled: false });
@@ -34,7 +35,7 @@ class Stats extends Component {
   };
 
   render() {
-    const { members, savings, loan } = this.state;
+    const { members, savings, loan, transaction } = this.state;
     return (
       <Card.Group style={{ margin: '0.25em' }}>
         <Card>
@@ -77,6 +78,24 @@ class Stats extends Component {
           </Card.Content>
           <Card.Content description>
             <Icon name="rupee sign" /> {loan.paidInterest}
+          </Card.Content>
+        </Card>
+
+        <Card>
+          <Card.Content style={{ background: '#000', color: 'white' }} header>
+            Other Income
+          </Card.Content>
+          <Card.Content description>
+            <Icon name="rupee sign" /> {transaction.income}
+          </Card.Content>
+        </Card>
+
+        <Card>
+          <Card.Content style={{ background: '#000', color: 'white' }} header>
+            Other Expense
+          </Card.Content>
+          <Card.Content description>
+            <Icon name="rupee sign" /> {transaction.expense}
           </Card.Content>
         </Card>
       </Card.Group>
