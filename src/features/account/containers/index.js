@@ -156,7 +156,8 @@ class Account extends Component {
                 </Header>
                 <p style={{ fontSize: '1.33em' }}>
                   You can add members and track their savings and loans. Get details realtime stats based on the
-                  transactions you have done over the time period, everything just some clicks away
+                  transactions you have done over the time period, everything just some clicks away. For any help please
+                  mail us at {process.env.REACT_APP_NOTIFY_EMAIL}
                 </p>
               </Grid.Column>
             </Grid.Row>
