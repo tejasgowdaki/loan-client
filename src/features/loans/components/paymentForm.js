@@ -14,7 +14,6 @@ const PaymentForm = ({ name, onClose, onSubmit, isDisabled }) => {
   const onChangeAmount = (event) => {
     const value = +event.target.value;
     setAmount(value);
-    setAmountError(value ? '' : 'Please enter amount');
   };
 
   const onChangeInterest = (event) => {
@@ -29,10 +28,10 @@ const PaymentForm = ({ name, onClose, onSubmit, isDisabled }) => {
   };
 
   const validate = () => {
-    setAmountError(amount ? '' : 'Please enter amount');
+    setAmountError(amount || interest ? '' : 'Please enter either amount or interest');
     setDateError(date ? '' : 'Please enter date');
 
-    return amount && date;
+    return (amount || interest) && date;
   };
 
   const submitForm = (e) => {
@@ -47,7 +46,7 @@ const PaymentForm = ({ name, onClose, onSubmit, isDisabled }) => {
     <FormModal header={`Loan payment for ${name}`} onClose={onClose} onSubmit={submitForm} isDisabled={isDisabled}>
       <Form>
         <Form.Group widths="equal">
-          <Form.Field fluid="true" required>
+          <Form.Field fluid="true">
             <label>Amount</label>
 
             <input
@@ -63,7 +62,7 @@ const PaymentForm = ({ name, onClose, onSubmit, isDisabled }) => {
             <span style={{ color: 'red' }}>{amountError}</span>
           </Form.Field>
 
-          <Form.Field fluid="true" required>
+          <Form.Field fluid="true">
             <label>Interest</label>
 
             <input
