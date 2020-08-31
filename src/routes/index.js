@@ -14,7 +14,7 @@ const MemberShow = lazy(() => import(/* webpackChunkName: 'MemberShow' */ '../fe
 
 const Loans = lazy(() => import(/* webpackChunkName: 'Loans' */ '../features/loans/containers'));
 
-const Stats = lazy(() => import(/* webpackChunkName: 'Home' */ '../features/stats'));
+const Stats = lazy(() => import(/* webpackChunkName: 'Home' */ '../features/stats/containers'));
 
 export const Routes = (props) => {
   return (
