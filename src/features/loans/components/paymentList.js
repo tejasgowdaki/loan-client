@@ -6,16 +6,15 @@ const PaymentList = ({ payments, deletePayment, isDisabled }) => {
   if (!payments.length) return <div>No payments found</div>;
 
   return (
-    <Card.Group style={{ marginBottom: '2em' }}>
+    <Card.Group style={{ marginTop: '.1em' }}>
       {payments.map(({ _id, amount, interest = 0, date }, index) => (
-        <Card key={_id} style={{ width: 'auto' }}>
+        <Card key={_id} fluid>
           <Card.Content>
-            <Card.Header style={{ margin: '1em' }}>
+            <Card.Header>
               <Label float="left">#{index + 1}</Label>
 
               <Button
                 as="a"
-                style={{ marginLeft: '2em' }}
                 floated="right"
                 size="mini"
                 color="red"
@@ -26,20 +25,20 @@ const PaymentList = ({ payments, deletePayment, isDisabled }) => {
               </Button>
             </Card.Header>
 
-            <Card.Header style={{ margin: '1em' }}>
-              <Label style={{ margin: '0.25em' }}>Date: {moment(date).format('DD MMMM YYYY')}</Label>
+            <Card.Header style={{ marginTop: '0.2em' }}>
+              <Label>Date: {moment(date).format('DD MMMM YYYY')}</Label>
 
-              <Label style={{ margin: '0.25em' }}>
+              <Label>
                 Amount: <Icon name="rupee sign" />
                 {amount}
               </Label>
 
-              <Label style={{ margin: '0.25em' }}>
+              <Label>
                 Interest: <Icon name="rupee sign" />
                 {interest}
               </Label>
 
-              <Label style={{ margin: '0.25em' }}>
+              <Label>
                 Total: <Icon name="rupee sign" />
                 {amount + interest}
               </Label>

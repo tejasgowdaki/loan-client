@@ -108,14 +108,13 @@ class LoanCard extends PureComponent {
 
     return (
       <>
-        <Card style={{ width: 'auto' }}>
+        <Card fluid color="black">
           <Card.Content>
-            <Card.Header style={{ margin: '1em' }}>
-              <Label float="left">#{index + 1}</Label>
+            <Card.Header>
+              <Label>#{index + 1}</Label>
 
               <Button
                 as="a"
-                style={{ marginLeft: '.2em' }}
                 floated="right"
                 size="mini"
                 color="red"
@@ -126,13 +125,12 @@ class LoanCard extends PureComponent {
               </Button>
 
               {isCompleted ? (
-                <Button as="a" style={{ marginLeft: '.2em' }} floated="right" size="mini" color="green">
+                <Button as="a" floated="right" size="mini" color="green">
                   Completed
                 </Button>
               ) : (
                 <Button
                   as="a"
-                  style={{ marginLeft: '.2em' }}
                   floated="right"
                   size="mini"
                   color="blue"
@@ -144,41 +142,41 @@ class LoanCard extends PureComponent {
               )}
             </Card.Header>
 
-            <Card.Header style={{ margin: '1em' }}>
-              <Label style={{ margin: '0.25em' }}>Date: {loanDate}</Label>
+            <Card.Header style={{ marginTop: '0.2em' }}>
+              <Label style={{ marginTop: '0.25em' }}>Date: {loanDate}</Label>
 
-              <Label style={{ margin: '0.25em' }}>
+              <Label style={{ marginTop: '0.25em' }}>
                 Amount: <Icon name="rupee sign" />
                 {loanAmount}
               </Label>
 
-              <Label style={{ margin: '0.25em' }}>
+              <Label style={{ marginTop: '0.25em' }}>
                 Paid: <Icon name="rupee sign" />
                 {loanPaidAmount}
               </Label>
 
-              <Label style={{ margin: '0.25em' }}>
+              <Label style={{ marginTop: '0.25em' }}>
                 Outstanding amount: <Icon name="rupee sign" />
                 {loanAmount - loanPaidAmount}
               </Label>
 
-              <Label style={{ margin: '0.25em' }}>
+              <Label style={{ marginTop: '0.25em' }}>
                 Interest: <Icon name="rupee sign" />
                 {loanPaidInterest}
               </Label>
             </Card.Header>
 
-            <Card.Description style={{ margin: '1em' }}>
+            <Card.Description>
               <Accordion fluid styled>
                 <Accordion.Title active={isShowPayments} onClick={this.togglePayments}>
                   <Icon name="dropdown" />
                   Payments
                 </Accordion.Title>
-
-                <Accordion.Content active={isShowPayments}>
-                  <PaymentList payments={payments} deletePayment={this.promptPaymentDelete} isDisabled={isDisabled} />
-                </Accordion.Content>
               </Accordion>
+
+              {isShowPayments ? (
+                <PaymentList payments={payments} deletePayment={this.promptPaymentDelete} isDisabled={isDisabled} />
+              ) : null}
             </Card.Description>
           </Card.Content>
         </Card>

@@ -5,7 +5,7 @@ const ShowCard = ({ name, mobile, totalSaving, remainingLoanAmount, toggleDeposi
   return (
     <div style={{ marginDown: '5em' }}>
       <Card.Group>
-        <Card style={{ width: 'auto', marginTop: '2em', marginLeft: '1.5em', marginRight: '1.5em', width: 'auto' }}>
+        <Card style={{ width: 'auto', marginTop: '2em', marginLeft: '1.5em', marginRight: '1.5em' }}>
           <Card.Content>
             <Header>Member Details</Header>
 
