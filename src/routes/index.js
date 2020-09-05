@@ -16,7 +16,9 @@ const Loans = lazy(() => import(/* webpackChunkName: 'Loans' */ '../features/loa
 
 const Transactions = lazy(() => import(/* webpackChunkName: 'Transactions' */ '../features/transaction/containers'));
 
-const Stats = lazy(() => import(/* webpackChunkName: 'Home' */ '../features/stats/containers'));
+const Stats = lazy(() => import(/* webpackChunkName: 'Stats' */ '../features/stats/containers'));
+
+const Utilities = lazy(() => import(/* webpackChunkName: 'Utilities' */ '../features/utilities/containers'));
 
 export const Routes = (props) => {
   return (
@@ -80,6 +82,16 @@ export const Routes = (props) => {
               render={(matchProps) => (
                 <Layout {...props} {...matchProps}>
                   <Stats {...matchProps} />
+                </Layout>
+              )}
+            />
+
+            <Route
+              path="/utilities"
+              exact
+              render={(matchProps) => (
+                <Layout {...props} {...matchProps}>
+                  <Utilities {...matchProps} />
                 </Layout>
               )}
             />

@@ -4,7 +4,7 @@ import SemanticDatepicker from 'react-semantic-ui-datepickers';
 
 import FormModal from '../../common/formModal';
 
-const DepositForm = ({ name, onClose, onSubmit, isDisabled }) => {
+const DepositForm = ({ name, onClose, onSubmit, isDisabled, title = null }) => {
   const [amount, setAmount] = useState(0);
   const [date, setDate] = useState(null);
   const [amountError, setAmountError] = useState('');
@@ -38,7 +38,12 @@ const DepositForm = ({ name, onClose, onSubmit, isDisabled }) => {
   };
 
   return (
-    <FormModal header={`Add new deposit to ${name}`} onClose={onClose} onSubmit={submitForm} isDisabled={isDisabled}>
+    <FormModal
+      header={title || `Add new deposit to ${name}`}
+      onClose={onClose}
+      onSubmit={submitForm}
+      isDisabled={isDisabled}
+    >
       <Form>
         <Form.Group widths="equal">
           <Form.Field fluid="true" required>

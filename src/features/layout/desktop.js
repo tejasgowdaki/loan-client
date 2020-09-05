@@ -44,6 +44,10 @@ class Desktop extends Component {
                   Stats
                 </Menu.Item>
 
+                <Menu.Item as="a" active={pathname === '/utilities'} onClick={() => onClickNavigate('/utilities')}>
+                  Utilities
+                </Menu.Item>
+
                 <Menu.Item position="right">
                   <Button as="a" inverted={!fixed} onClick={logout}>
                     Log Out

@@ -28,3 +28,12 @@ export const deleteDeposit = async (id, deposit) => {
     throw error;
   }
 };
+
+export const bulkDeposit = async (deposit) => {
+  try {
+    const response = await post(`${url}/bulk`, deposit);
+    return response.savings;
+  } catch (error) {
+    throw error;
+  }
+};

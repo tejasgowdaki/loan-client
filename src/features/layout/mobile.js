@@ -43,6 +43,10 @@ class Mobile extends Component {
             Stats
           </Menu.Item>
 
+          <Menu.Item as="a" active={pathname === '/utilities'} onClick={() => onClickNavigate('/utilities')}>
+            Utilities
+          </Menu.Item>
+
           <Menu.Item as="a" onClick={logout}>
             Log Out
           </Menu.Item>
