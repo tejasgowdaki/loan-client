@@ -3,11 +3,11 @@ import { connect } from 'react-redux';
 import { Tab } from 'semantic-ui-react';
 
 import ConfirmModal from '../../common/confirmModal';
-import DepositList from '../../savings/components/depositList';
+import DepositTable from '../../savings/components/depositTable';
 import DepositForm from '../../savings/components/depositForm';
 import LoanForm from '../../loans/components/form';
 import ShowCard from '../components/showCard';
-import LoanList from '../../loans/components/loanList';
+import LoanTable from '../../loans/components/loanTable';
 
 import { addDeposit, deleteDeposit } from '../../savings/api';
 import { createLoan, updateLoan } from '../../loans/api';
@@ -15,6 +15,8 @@ import { createLoan, updateLoan } from '../../loans/api';
 import { setAlert } from '../../alert/reducer';
 import { upsertSaving } from '../../savings/reducer';
 import { newLoan, upsertLoan, removeLoan } from '../../loans/reducer';
+
+const panes = [{ menuItem: 'Loan' }, { menuItem: 'Saving' }];
 
 class MemberShow extends Component {
   constructor(props) {
@@ -25,9 +27,12 @@ class MemberShow extends Component {
       deleteDepositId: null,
       isShowDepositForm: false,
       isShowLoanForm: false,
-      formLoan: null
+      formLoan: null,
+      activeIndex: 0
     };
   }
+
+  onTabChange = (event, data) => this.setState({ activeIndex: data.activeIndex });
 
   promptDepositDelete = (deleteDepositId) => this.setState({ isShowDeleteDepositModal: true, deleteDepositId });
 
@@ -108,26 +113,7 @@ class MemberShow extends Component {
 
   render() {
     const { name, mobile, totalSaving, deposits, loans, remainingLoanAmount } = this.props;
-    const { isDisabled, isShowDeleteDepositModal, isShowDepositForm, isShowLoanForm } = this.state;
-
-    const panes = [
-      {
-        menuItem: 'Loan',
-        render: () => (
-          <Tab.Pane>
-            <LoanList loans={loans} />
-          </Tab.Pane>
-        )
-      },
-      {
-        menuItem: 'Saving',
-        render: () => (
-          <Tab.Pane>
-            <DepositList deposits={deposits} deleteDeposit={this.promptDepositDelete} isDisabled={isDisabled} />
-          </Tab.Pane>
-        )
-      }
-    ];
+    const { isDisabled, isShowDeleteDepositModal, isShowDepositForm, isShowLoanForm, activeIndex } = this.state;
 
     return (
       <>
@@ -141,9 +127,13 @@ class MemberShow extends Component {
           isDisabled={isDisabled}
         />
 
-        <div style={{ margin: '1em' }}>
-          <Tab panes={panes} />
-        </div>
+        <Tab menu={{ secondary: true, pointing: true }} panes={panes} onTabChange={this.onTabChange} />
+
+        {activeIndex === 0 ? <LoanTable loans={loans} /> : null}
+
+        {activeIndex === 1 ? (
+          <DepositTable deposits={deposits} deleteDeposit={this.promptDepositDelete} isDisabled={isDisabled} />
+        ) : null}
 
         {isShowDeleteDepositModal ? (
           <ConfirmModal
