@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { Table, Button, Header } from 'semantic-ui-react';
 import moment from 'moment';
+import { WhatsappIcon, WhatsappShareButton } from 'react-share';
 
 import ConfirmModal from '../../common/confirmModal';
 import PaymentForm from './paymentForm';
@@ -138,6 +139,12 @@ class LoanRow extends PureComponent {
     }
   };
 
+  constructWhatsAppMessage = (isCompleted, memberName, amount, paidAmount, paidInterest, pending, nextInterest) => {
+    if (isCompleted) return `Hi ${memberName}, your loan has been paid completely \n`;
+
+    return `Hi ${memberName}, your loan payment has been made. \nLoan Amount - ₹ ${amount} \nTotal Paid - ₹ ${paidAmount} \nPending loan amount - ₹ ${pending} \nTotal Interest Paid - ₹ ${paidInterest} \nNext Month's Interest - ₹ ${nextInterest} \n`;
+  };
+
   render() {
     const {
       slNumber,
@@ -148,7 +155,8 @@ class LoanRow extends PureComponent {
       payments = [],
       subLoans = [],
       isCompleted,
-      interestRate
+      interestRate,
+      accountName
     } = this.props;
 
     const {
@@ -164,6 +172,16 @@ class LoanRow extends PureComponent {
     const pending = amount - paidAmount;
     const nextInterest = (pending / 100) * interestRate;
 
+    const whatsMessageTitle = this.constructWhatsAppMessage(
+      isCompleted,
+      memberName,
+      amount,
+      paidAmount,
+      paidInterest,
+      pending,
+      nextInterest
+    );
+
     return (
       <>
         <Table.Body>
@@ -178,6 +196,12 @@ class LoanRow extends PureComponent {
 
           <Table.Row textAlign="left">
             <Table.Cell colSpan="5">
+              <span floated="right">
+                <WhatsappShareButton url={accountName} title={whatsMessageTitle} separator=" -">
+                  <WhatsappIcon size={30} round={true} />
+                </WhatsappShareButton>
+              </span>
+
               <Button
                 as="a"
                 floated="right"
@@ -307,7 +331,8 @@ const mapStateToProps = ({ members, loans, account }, { loanId }) => {
     payments: (loan.payments || []).sort((t1, t2) => (new Date(t1.date) > new Date(t2.date) ? 1 : -1)),
     subLoans: (loan.subLoans || []).sort((t1, t2) => (new Date(t1.date) > new Date(t2.date) ? 1 : -1)),
     isCompleted: loan.isCompleted,
-    interestRate: ((account || {}).config || {}).interestRate || 1
+    interestRate: ((account || {}).config || {}).interestRate || 1,
+    accountName: (account || {}).name || 'N/A'
   };
 };
 
