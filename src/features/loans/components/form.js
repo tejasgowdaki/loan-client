@@ -4,7 +4,7 @@ import SemanticDatepicker from 'react-semantic-ui-datepickers';
 
 import FormModal from '../../common/formModal';
 
-const LoanForm = ({ name, onClose, onSubmit, isDisabled, loan = null }) => {
+const LoanForm = ({ name, onClose, onSubmit, isDisabled, loan = null, isSubLoan = false }) => {
   const [amount, setAmount] = useState(loan ? loan.amount : 0);
   const [date, setDate] = useState(loan ? loan.date : null);
   const [amountError, setAmountError] = useState('');
@@ -39,7 +39,11 @@ const LoanForm = ({ name, onClose, onSubmit, isDisabled, loan = null }) => {
 
   return (
     <FormModal
-      header={loan ? `Update loan for ${name}` : `Create new loan for ${name}`}
+      header={
+        loan
+          ? `Update ${isSubLoan ? 'additional loan' : 'loan'} of ${name}`
+          : `Create ${isSubLoan ? 'additional loan' : 'new loan'} for ${name}`
+      }
       onClose={onClose}
       onSubmit={submitForm}
       isDisabled={isDisabled}

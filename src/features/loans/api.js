@@ -20,6 +20,24 @@ export const createLoan = async (loan) => {
   }
 };
 
+export const updateSubLoan = async (id, subLoan) => {
+  try {
+    const response = await post(`${url}/sub-loan/${id}`, subLoan);
+    return response.loan;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const deleteSubLoan = async (id, subLoanId) => {
+  try {
+    const response = await destroy(`${url}/sub-loan/${id}/${subLoanId}`);
+    return response.loan;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const updateLoan = async (id, loan) => {
   try {
     const response = await put(`${url}/${id}`, loan);

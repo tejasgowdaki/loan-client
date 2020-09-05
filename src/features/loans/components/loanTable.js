@@ -11,7 +11,6 @@ const LoanTable = ({ loans }) => {
       <Table.Header>
         <Table.Row textAlign="left">
           <Table.HeaderCell>Sl.</Table.HeaderCell>
-          <Table.HeaderCell>Date</Table.HeaderCell>
           <Table.HeaderCell>
             Amount <br />(<Icon name="rupee sign" />)
           </Table.HeaderCell>

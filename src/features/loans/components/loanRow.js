@@ -6,9 +6,11 @@ import moment from 'moment';
 import ConfirmModal from '../../common/confirmModal';
 import PaymentForm from './paymentForm';
 import PaymentTable from './paymantTable';
+import SubLoanTable from './subLoanTable';
+import LoanForm from './form';
 import FormModal from '../../common/formModal';
 
-import { addPayment, deletePayment, deleteLoan } from '../api';
+import { addPayment, deletePayment, deleteLoan, updateSubLoan, deleteSubLoan } from '../api';
 
 import { setAlert } from '../../alert/reducer';
 import { upsertLoan, removeLoan } from '../../loans/reducer';
@@ -18,16 +20,63 @@ class LoanRow extends PureComponent {
     super(props);
     this.state = {
       isDisabled: false,
+      isShowSubLoanForm: false,
       isShowDetails: false,
       isShowDeleteLoanModal: false,
       isShowPaymentForm: false,
-
       isShowDeletePaymentModal: false,
-      deletePaymentId: null
+      deletePaymentId: null,
+      isShowDeleteSubLoanModal: false,
+      subLoan: null
     };
   }
 
+  openSubLoanForm = (subLoan = null) => this.setState({ isShowSubLoanForm: true, subLoan });
+
+  closeSubLoanForm = () => this.setState({ isShowSubLoanForm: false, subLoan: null });
+
+  submitSubLoan = async (amount, date) => {
+    try {
+      this.setState({ isDisabled: true });
+      const subLoan = this.state.subLoan;
+
+      const subLoanObject = subLoan ? { ...subLoan, amount, date } : { amount, date };
+
+      const loan = await updateSubLoan(this.props.loanId, subLoanObject);
+      this.props.upsertLoan(loan);
+      this.props.setAlert({
+        type: 'Success',
+        message: `Successfully added loan amount of ₹ ${amount} to ${this.props.memberName}`
+      });
+
+      this.setState({ isDisabled: false, isShowSubLoanForm: false, subLoan: null });
+    } catch (error) {
+      this.props.setAlert({ type: 'Error', message: error.message });
+      this.setState({ isDisabled: false });
+    }
+  };
+
   toggleDetails = () => this.setState({ isShowDetails: !this.state.isShowDetails });
+
+  promptSubLoanDelete = (subLoan) => this.setState({ isShowDeleteSubLoanModal: true, subLoan });
+
+  closeDeleteSubLoanModal = () => this.setState({ isShowDeleteSubLoanModal: false, subLoan: null });
+
+  confirmDeleteSubLoan = async (e) => {
+    try {
+      e.preventDefault();
+      this.setState({ isDisabled: true });
+
+      const loan = await deleteSubLoan(this.props.loanId, this.state.subLoan._id);
+      this.props.upsertLoan(loan);
+      this.props.setAlert({ type: 'Success', message: 'Successfully update loan amount' });
+
+      this.setState({ isShowDeleteSubLoanModal: false, subLoan: null, isDisabled: false });
+    } catch (error) {
+      this.props.setAlert({ type: 'Error', message: error.message });
+      this.setState({ isDisabled: false });
+    }
+  };
 
   promptLoanDelete = () => this.setState({ isShowDeleteLoanModal: true });
 
@@ -90,14 +139,26 @@ class LoanRow extends PureComponent {
   };
 
   render() {
-    const { slNumber, memberName, date, amount, paidAmount, paidInterest, payments = [], isCompleted } = this.props;
+    const {
+      slNumber,
+      memberName,
+      date,
+      amount,
+      paidAmount,
+      paidInterest,
+      payments = [],
+      subLoans = [],
+      isCompleted
+    } = this.props;
 
     const {
       isDisabled,
       isShowDetails,
       isShowDeleteLoanModal,
       isShowPaymentForm,
-      isShowDeletePaymentModal
+      isShowDeletePaymentModal,
+      isShowSubLoanForm,
+      isShowDeleteSubLoanModal
     } = this.state;
 
     return (
@@ -105,7 +166,6 @@ class LoanRow extends PureComponent {
         <Table.Body>
           <Table.Row textAlign="left">
             <Table.Cell rowSpan="2">{slNumber}</Table.Cell>
-            <Table.Cell>{date}</Table.Cell>
             <Table.Cell>{amount}</Table.Cell>
             <Table.Cell>{paidAmount}</Table.Cell>
             <Table.Cell>{amount - paidAmount}</Table.Cell>
@@ -113,7 +173,7 @@ class LoanRow extends PureComponent {
           </Table.Row>
 
           <Table.Row textAlign="left">
-            <Table.Cell colSpan="5">
+            <Table.Cell colSpan="4">
               <Button
                 as="a"
                 floated="right"
@@ -149,7 +209,7 @@ class LoanRow extends PureComponent {
                 floated="right"
                 size="mini"
                 color="green"
-                // onClick={this.promptLoanDelete}
+                onClick={() => this.openSubLoanForm(null)}
                 style={{ marginTop: '0.1em' }}
                 disabled={isDisabled}
               >
@@ -172,7 +232,9 @@ class LoanRow extends PureComponent {
         </Table.Body>
 
         {isShowDetails ? (
-          <FormModal header="Loan details" closeLabel="Close" onClose={this.toggleDetails}>
+          <FormModal header="Loan details" closeLabel="Close" onClose={this.toggleDetails} isNotForm>
+            <Header as="h4">Loans</Header>
+            <SubLoanTable subLoans={subLoans} deleteSubLoan={this.promptSubLoanDelete} isDisabled={isDisabled} />
             <Header as="h4">Payments</Header>
             <PaymentTable payments={payments} deletePayment={this.promptPaymentDelete} isDisabled={isDisabled} />
           </FormModal>
@@ -184,6 +246,15 @@ class LoanRow extends PureComponent {
             content={`Are you sure you want to delete this loan?`}
             onClickSubmit={this.confirmDeleteLoan}
             onClickCancel={this.closeDeleteLoanModal}
+          />
+        ) : null}
+
+        {isShowDeleteSubLoanModal ? (
+          <ConfirmModal
+            header="Deleting additional loan!!"
+            content={`Are you sure you want to delete this?`}
+            onClickSubmit={this.confirmDeleteSubLoan}
+            onClickCancel={this.closeDeleteSubLoanModal}
           />
         ) : null}
 
@@ -204,6 +275,16 @@ class LoanRow extends PureComponent {
             onClickCancel={this.closeDeletePaymentModal}
           />
         ) : null}
+
+        {isShowSubLoanForm ? (
+          <LoanForm
+            isSubLoan
+            name={memberName}
+            onClose={this.closeSubLoanForm}
+            onSubmit={this.submitSubLoan}
+            isDisabled={isDisabled}
+          />
+        ) : null}
       </>
     );
   }
@@ -220,6 +301,7 @@ const mapStateToProps = ({ members, loans }, { loanId }) => {
     paidAmount: loan.paidAmount || 0,
     paidInterest: loan.paidInterest || 0,
     payments: (loan.payments || []).sort((t1, t2) => (new Date(t1.date) > new Date(t2.date) ? 1 : -1)),
+    subLoans: (loan.subLoans || []).sort((t1, t2) => (new Date(t1.date) > new Date(t2.date) ? 1 : -1)),
     isCompleted: loan.isCompleted
   };
 };

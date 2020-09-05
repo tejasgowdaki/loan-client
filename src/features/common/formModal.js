@@ -8,14 +8,15 @@ const FormModal = ({
   isDisabled,
   children,
   submitLabel = 'Submit',
-  closeLabel = 'Cancel'
+  closeLabel = 'Cancel',
+  isNotForm = false
 }) => (
   <Modal open centered={false} style={{ width: 'auto', height: 'auto' }}>
     <Modal.Header>
       <span style={{ paddingRight: '3em' }}>{header}</span>
     </Modal.Header>
 
-    <Modal.Content style={{ width: 'auto', height: 'auto' }} scrolling>
+    <Modal.Content style={{ width: 'auto', height: 'auto' }} scrolling={isNotForm}>
       {children}
     </Modal.Content>
 
