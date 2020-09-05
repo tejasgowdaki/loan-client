@@ -307,7 +307,7 @@ const mapStateToProps = ({ members, loans, account }, { loanId }) => {
     payments: (loan.payments || []).sort((t1, t2) => (new Date(t1.date) > new Date(t2.date) ? 1 : -1)),
     subLoans: (loan.subLoans || []).sort((t1, t2) => (new Date(t1.date) > new Date(t2.date) ? 1 : -1)),
     isCompleted: loan.isCompleted,
-    interestRate: (account || {}).account || 1
+    interestRate: ((account || {}).config || {}).interestRate || 1
   };
 };
 

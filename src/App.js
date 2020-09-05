@@ -40,6 +40,7 @@ class App extends Component {
     try {
       this.props.setAccount(null);
       localStorage.removeItem('XFLK');
+      this.props.history.push('/');
     } catch (error) {
       console.error(error);
     }

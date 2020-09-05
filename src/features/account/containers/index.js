@@ -5,7 +5,7 @@ import { Segment, Header, Button, Grid } from 'semantic-ui-react';
 import MemberForm from '../../members/components/form';
 import LoginForm from '../../auth/components/loginForm';
 
-import { createAccount } from '../api';
+import { createAccount, getAccounts } from '../api';
 import { requestLoginOTP, login } from '../../auth/api';
 
 import { setAlert } from '../../alert/reducer';
@@ -21,13 +21,33 @@ class Account extends Component {
       isShowSignUpForm: false,
       loginMobile: null,
       loginMobileErrorMessage: '',
+      loginAccount: null,
+      loginAccountErrorMessage: '',
       loginOTP: null,
       loginOtpErrorMessage: '',
       isShowLoginForm: false,
       isShowOTP: false,
-      isDisabled: false
+      isDisabled: false,
+      accounts: []
     };
   }
+
+  componentDidMount = async () => {
+    this.fetchAccounts();
+  };
+
+  fetchAccounts = async () => {
+    try {
+      this.setState({ isDisabled: true });
+      const accounts = await getAccounts();
+      const formattedAccounts = accounts.map(({ _id, name, mobile }) => ({ key: _id, text: name, value: _id, mobile }));
+
+      this.setState({ isDisabled: false, accounts: formattedAccounts });
+    } catch (error) {
+      this.props.setAlert({ type: 'Error', message: error.message });
+      this.setState({ isDisabled: false });
+    }
+  };
 
   toggleSignUpForm = () => this.setState({ account: {}, isShowSignUpForm: !this.state.isShowSignUpForm });
 
@@ -51,6 +71,8 @@ class Account extends Component {
 
       // new account
       const account = await createAccount(this.state.account);
+      const accounts = this.state.accounts;
+      accounts.push({ key: account._id, text: account.name, value: account._id, mobile: account.mobile });
 
       this.props.setAlert({
         type: 'Success',
@@ -69,14 +91,18 @@ class Account extends Component {
     this.setState({
       loginMobile: null,
       loginOTP: null,
+      loginAccount: null,
       isShowOTP: false,
       isShowLoginForm: !this.state.isShowLoginForm
     });
 
   updateLoginMobile = (loginMobile) => {
-    const loginMobileErrorMessage =
-      !loginMobile || loginMobile.length !== 10 ? 'Mobile number is required and should be 10 digits' : '';
-    this.setState({ loginMobile, loginMobileErrorMessage });
+    if (loginMobile.length > 10) return;
+    this.setState({ loginMobile }, () => this.validateLoginMobile());
+  };
+
+  updateLoginAccount = (event, data) => {
+    this.setState({ loginAccount: data.value }, () => this.validateLoginAccount());
   };
 
   updateLoginOTP = (loginOTP) => {
@@ -85,10 +111,35 @@ class Account extends Component {
   };
 
   validateLoginMobile = () => {
-    if (!this.state.loginMobile) return false;
-    if (this.state.loginMobile.length !== 10) return false;
+    let valid = true,
+      message = '';
+    if (!this.state.loginMobile) {
+      valid = false;
+      message = 'Mobile number is required';
+    } else if (this.state.loginMobile.length !== 10) {
+      valid = false;
+      message = 'Mobile number should be 10 digits';
+    } else if (!this.state.accounts.find(({ mobile }) => mobile === this.state.loginMobile)) {
+      valid = false;
+      message = 'Incorrect mobile number or account does not exist';
+    }
 
-    return true;
+    this.setState({ loginMobileErrorMessage: message });
+
+    return valid;
+  };
+
+  validateLoginAccount = () => {
+    let valid = true,
+      message = '';
+    if (!this.state.loginMobile) {
+      valid = false;
+      message = 'Please select account';
+    }
+
+    this.setState({ loginAccountErrorMessage: message });
+
+    return valid;
   };
 
   validateLoginOTP = () => {
@@ -108,7 +159,7 @@ class Account extends Component {
         }
 
         // login
-        const token = await login({ mobile: this.state.loginMobile, otp: this.state.loginOTP });
+        const token = await login({ accountId: this.state.loginAccount, otp: this.state.loginOTP });
         const account = fetchAccountFromToken(token);
         this.props.setAccount({ ...account, token });
 
@@ -124,15 +175,12 @@ class Account extends Component {
           loginOTP: null
         });
       } else {
-        if (!this.validateLoginMobile()) {
-          this.setState({ loginMobileErrorMessage: 'Mobile number is required and should be 10 digits' });
-          return;
-        }
+        if (!this.validateLoginMobile() || !this.validateLoginAccount()) return;
 
         this.setState({ isDisabled: true });
 
         // request OTP for login
-        const message = await requestLoginOTP({ mobile: this.state.loginMobile });
+        const message = await requestLoginOTP({ accountId: this.state.loginAccount });
 
         this.props.setAlert({ type: 'Success', message });
 
@@ -193,6 +241,9 @@ class Account extends Component {
             loginMobile={this.state.loginMobile}
             updateLoginMobile={this.updateLoginMobile}
             loginMobileErrorMessage={this.state.loginMobileErrorMessage}
+            loginAccount={this.state.loginAccount}
+            updateLoginAccount={this.updateLoginAccount}
+            loginAccountErrorMessage={this.state.loginAccountErrorMessage}
             isShowOTP={this.state.isShowOTP}
             loginOTP={this.state.loginOTP}
             updateLoginOTP={this.updateLoginOTP}
@@ -200,6 +251,7 @@ class Account extends Component {
             onClose={this.toggleLoginForm}
             onSubmit={this.onSubmitLogin}
             isDisabled={this.state.isDisabled}
+            accounts={this.state.accounts}
           />
         ) : null}
       </>
