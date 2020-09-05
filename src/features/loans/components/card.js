@@ -156,7 +156,7 @@ class LoanCard extends PureComponent {
               </Label>
 
               <Label style={{ marginTop: '0.25em' }}>
-                Outstanding amount: <Icon name="rupee sign" />
+                Pending amount: <Icon name="rupee sign" />
                 {loanAmount - loanPaidAmount}
               </Label>
 

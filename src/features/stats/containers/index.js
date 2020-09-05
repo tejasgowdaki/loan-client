@@ -36,6 +36,9 @@ class Stats extends Component {
 
   render() {
     const { members, savings, loan, transaction } = this.state;
+
+    const profit = savings + loan.paidInterest + transaction.income - transaction.expense;
+    const profitPerMember = parseInt(profit / members);
     return (
       <Card.Group style={{ margin: '0.25em' }}>
         <Card>
@@ -43,6 +46,24 @@ class Stats extends Component {
             Members
           </Card.Content>
           <Card.Content description>{members}</Card.Content>
+        </Card>
+
+        <Card>
+          <Card.Content style={{ background: '#000', color: 'white' }} header>
+            Profit
+          </Card.Content>
+          <Card.Content description>
+            <Icon name="rupee sign" /> {profit}
+          </Card.Content>
+        </Card>
+
+        <Card>
+          <Card.Content style={{ background: '#000', color: 'white' }} header>
+            Profit per member
+          </Card.Content>
+          <Card.Content description>
+            <Icon name="rupee sign" /> {profitPerMember}
+          </Card.Content>
         </Card>
 
         <Card>

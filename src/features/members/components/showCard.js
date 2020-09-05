@@ -24,7 +24,7 @@ const ShowCard = ({ name, mobile, totalSaving, remainingLoanAmount, toggleDeposi
               </Label>
 
               <Label float="left" style={{ margin: '.3em ' }}>
-                Outstanding loan amount: <Icon name="rupee sign" />
+                Pending loan amount: <Icon name="rupee sign" />
                 {remainingLoanAmount}
               </Label>
             </Card.Description>

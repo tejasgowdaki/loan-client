@@ -18,10 +18,13 @@ const LoanTable = ({ loans }) => {
             Paid <br />(<Icon name="rupee sign" />)
           </Table.HeaderCell>
           <Table.HeaderCell>
-            Outstanding <br />(<Icon name="rupee sign" />)
+            Pending <br />(<Icon name="rupee sign" />)
           </Table.HeaderCell>
           <Table.HeaderCell>
             Paid <br /> Interest <br />(<Icon name="rupee sign" />)
+          </Table.HeaderCell>
+          <Table.HeaderCell>
+            Next <br /> Interest <br />(<Icon name="rupee sign" />)
           </Table.HeaderCell>
         </Table.Row>
       </Table.Header>

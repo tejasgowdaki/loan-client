@@ -142,13 +142,13 @@ class LoanRow extends PureComponent {
     const {
       slNumber,
       memberName,
-      date,
       amount,
       paidAmount,
       paidInterest,
       payments = [],
       subLoans = [],
-      isCompleted
+      isCompleted,
+      interestRate
     } = this.props;
 
     const {
@@ -161,6 +161,9 @@ class LoanRow extends PureComponent {
       isShowDeleteSubLoanModal
     } = this.state;
 
+    const pending = amount - paidAmount;
+    const nextInterest = (pending / 100) * interestRate;
+
     return (
       <>
         <Table.Body>
@@ -168,12 +171,13 @@ class LoanRow extends PureComponent {
             <Table.Cell rowSpan="2">{slNumber}</Table.Cell>
             <Table.Cell>{amount}</Table.Cell>
             <Table.Cell>{paidAmount}</Table.Cell>
-            <Table.Cell>{amount - paidAmount}</Table.Cell>
+            <Table.Cell>{pending}</Table.Cell>
             <Table.Cell>{paidInterest}</Table.Cell>
+            <Table.Cell>{nextInterest}</Table.Cell>
           </Table.Row>
 
           <Table.Row textAlign="left">
-            <Table.Cell colSpan="4">
+            <Table.Cell colSpan="5">
               <Button
                 as="a"
                 floated="right"
@@ -290,7 +294,7 @@ class LoanRow extends PureComponent {
   }
 }
 
-const mapStateToProps = ({ members, loans }, { loanId }) => {
+const mapStateToProps = ({ members, loans, account }, { loanId }) => {
   const loan = loans.find(({ _id }) => _id === loanId) || {};
   const member = members.find((m) => m._id === loan.memberId) || {};
 
@@ -302,7 +306,8 @@ const mapStateToProps = ({ members, loans }, { loanId }) => {
     paidInterest: loan.paidInterest || 0,
     payments: (loan.payments || []).sort((t1, t2) => (new Date(t1.date) > new Date(t2.date) ? 1 : -1)),
     subLoans: (loan.subLoans || []).sort((t1, t2) => (new Date(t1.date) > new Date(t2.date) ? 1 : -1)),
-    isCompleted: loan.isCompleted
+    isCompleted: loan.isCompleted,
+    interestRate: (account || {}).account || 1
   };
 };
 
