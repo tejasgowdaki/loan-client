@@ -95,6 +95,15 @@ class Stats extends Component {
 
         <Card>
           <Card.Content style={{ background: '#000', color: 'white' }} header>
+            Loan pending
+          </Card.Content>
+          <Card.Content description>
+            <Icon name="rupee sign" /> {loan.amount - loan.paidAmount}
+          </Card.Content>
+        </Card>
+
+        <Card>
+          <Card.Content style={{ background: '#000', color: 'white' }} header>
             Interest collected
           </Card.Content>
           <Card.Content description>
