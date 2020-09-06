@@ -34,6 +34,14 @@ class Desktop extends Component {
 
                 <Menu.Item
                   as="a"
+                  active={pathname === '/active-loans'}
+                  onClick={() => onClickNavigate('/active-loans')}
+                >
+                  Active Loans
+                </Menu.Item>
+
+                <Menu.Item
+                  as="a"
                   active={pathname === '/transactions'}
                   onClick={() => onClickNavigate('/transactions')}
                 >

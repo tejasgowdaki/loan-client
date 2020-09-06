@@ -231,17 +231,19 @@ class LoanRow extends PureComponent {
                 </Button>
               )}
 
-              <Button
-                as="a"
-                floated="right"
-                size="mini"
-                color="green"
-                onClick={() => this.openSubLoanForm(null)}
-                style={{ marginTop: '0.1em' }}
-                disabled={isDisabled}
-              >
-                Additional Loan
-              </Button>
+              {isCompleted ? null : (
+                <Button
+                  as="a"
+                  floated="right"
+                  size="mini"
+                  color="green"
+                  onClick={() => this.openSubLoanForm(null)}
+                  style={{ marginTop: '0.1em' }}
+                  disabled={isDisabled}
+                >
+                  Additional Loan
+                </Button>
+              )}
 
               <Button
                 as="a"

@@ -47,6 +47,16 @@ export const Routes = (props) => {
             />
 
             <Route
+              path="/active-loans"
+              exact
+              render={(matchProps) => (
+                <Layout {...props} {...matchProps}>
+                  <Members {...matchProps} isActiveLoans />
+                </Layout>
+              )}
+            />
+
+            <Route
               path="/members/:memberId"
               exact
               render={(matchProps) => (

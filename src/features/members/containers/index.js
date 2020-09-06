@@ -12,7 +12,7 @@ import { setAlert } from '../../alert/reducer';
 import { newMember, upsertMember, setSearchText } from '../reducer';
 import { newSaving } from '../../savings/reducer';
 
-import { searchMembers } from '../../../helpers/members';
+import { searchMembers, fetchAtiveLoanMembers } from '../../../helpers/members';
 
 class Members extends Component {
   constructor(props) {
@@ -114,7 +114,9 @@ class Members extends Component {
               <MemberCard key={m} memberId={m} toggleForm={this.toggleForm} navigateTo={this.navigateTo} />
             ))
           ) : (
-            <Label style={{ margin: '2em' }}>No members found</Label>
+            <Label style={{ margin: '2em' }}>
+              No {this.props.isActiveLoans ? 'active loan members' : 'members'} found
+            </Label>
           )}
         </Card.Group>
 
@@ -133,10 +135,13 @@ class Members extends Component {
   }
 }
 
-const mapStateToProps = ({ members, searchText }) => ({
-  memberIds: searchMembers(members, searchText).map((m) => m._id),
-  searchText
-});
+const mapStateToProps = ({ members, loans, searchText }, { isActiveLoans }) => {
+  const filterdMembers = isActiveLoans ? fetchAtiveLoanMembers(members, loans) : members;
+  return {
+    memberIds: searchMembers(filterdMembers, searchText).map((m) => m._id),
+    searchText
+  };
+};
 
 const mapDispatchToProps = {
   setAlert,
