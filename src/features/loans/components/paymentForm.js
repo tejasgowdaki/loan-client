@@ -4,9 +4,9 @@ import SemanticDatepicker from 'react-semantic-ui-datepickers';
 
 import FormModal from '../../common/formModal';
 
-const PaymentForm = ({ name, onClose, onSubmit, isDisabled }) => {
+const PaymentForm = ({ name, onClose, onSubmit, isDisabled, nextInterest = 0 }) => {
   const [amount, setAmount] = useState(0);
-  const [interest, setInterest] = useState(0);
+  const [interest, setInterest] = useState(nextInterest);
   const [date, setDate] = useState(null);
   const [amountError, setAmountError] = useState('');
   const [dateError, setDateError] = useState('');

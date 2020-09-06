@@ -191,11 +191,10 @@ class LoanRow extends PureComponent {
             <Table.Cell>{paidAmount}</Table.Cell>
             <Table.Cell>{pending}</Table.Cell>
             <Table.Cell>{paidInterest}</Table.Cell>
-            <Table.Cell>{nextInterest}</Table.Cell>
           </Table.Row>
 
           <Table.Row textAlign="left">
-            <Table.Cell colSpan="5">
+            <Table.Cell colSpan="4">
               <span floated="right">
                 <WhatsappShareButton url={accountName} title={whatsMessageTitle} separator=" -">
                   <WhatsappIcon size={30} round={true} />
@@ -292,6 +291,7 @@ class LoanRow extends PureComponent {
             isDisabled={isDisabled}
             onClose={this.togglePaymentForm}
             onSubmit={this.submitPayment}
+            nextInterest={nextInterest}
           />
         ) : null}
 

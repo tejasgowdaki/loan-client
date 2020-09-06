@@ -12,19 +12,21 @@ const LoanTable = ({ loans }) => {
         <Table.Row textAlign="left">
           <Table.HeaderCell>Sl.</Table.HeaderCell>
           <Table.HeaderCell>
+            Loan <br />
             Amount <br />(<Icon name="rupee sign" />)
           </Table.HeaderCell>
           <Table.HeaderCell>
+            Total <br />
             Paid <br />(<Icon name="rupee sign" />)
           </Table.HeaderCell>
           <Table.HeaderCell>
             Pending <br />(<Icon name="rupee sign" />)
           </Table.HeaderCell>
           <Table.HeaderCell>
-            Paid <br /> Interest <br />(<Icon name="rupee sign" />)
-          </Table.HeaderCell>
-          <Table.HeaderCell>
-            Next <br /> Interest <br />(<Icon name="rupee sign" />)
+            Total <br />
+            Paid <br />
+            Interest <br />
+            (<Icon name="rupee sign" />)
           </Table.HeaderCell>
         </Table.Row>
       </Table.Header>
