@@ -89,7 +89,7 @@ class MemberCard extends PureComponent {
                   </Label>
 
                   <Label style={{ margin: '0.25em' }}>
-                    Pending loan amount: <Icon name="rupee sign" />
+                    Remaining loan amount: <Icon name="rupee sign" />
                     {remainingLoanAmount}
                   </Label>
                 </Grid.Row>

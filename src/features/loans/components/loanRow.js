@@ -139,10 +139,10 @@ class LoanRow extends PureComponent {
     }
   };
 
-  constructWhatsAppMessage = (isCompleted, memberName, amount, paidAmount, paidInterest, pending, nextInterest) => {
+  constructWhatsAppMessage = (isCompleted, memberName, amount, paidAmount, paidInterest, remaining, nextInterest) => {
     if (isCompleted) return `Hi ${memberName}, your loan has been paid completely \n`;
 
-    return `Hi ${memberName}, your loan payment has been made. \nLoan Amount - ₹ ${amount} \nTotal Paid - ₹ ${paidAmount} \nPending loan amount - ₹ ${pending} \nTotal Interest Paid - ₹ ${paidInterest} \nNext Month's Interest - ₹ ${nextInterest} \n`;
+    return `Hi ${memberName}, your loan payment has been made. \nLoan Amount - ₹ ${amount} \nTotal Paid - ₹ ${paidAmount} \nRemaining loan amount - ₹ ${remaining} \nNext Month's Interest - ₹ ${nextInterest} \n`;
   };
 
   render() {
@@ -169,8 +169,8 @@ class LoanRow extends PureComponent {
       isShowDeleteSubLoanModal
     } = this.state;
 
-    const pending = amount - paidAmount;
-    const nextInterest = (pending / 100) * interestRate;
+    const remaining = amount - paidAmount;
+    const nextInterest = (remaining / 100) * interestRate;
 
     const whatsMessageTitle = this.constructWhatsAppMessage(
       isCompleted,
@@ -178,7 +178,7 @@ class LoanRow extends PureComponent {
       amount,
       paidAmount,
       paidInterest,
-      pending,
+      remaining,
       nextInterest
     );
 
@@ -189,17 +189,19 @@ class LoanRow extends PureComponent {
             <Table.Cell rowSpan="2">{slNumber}</Table.Cell>
             <Table.Cell>{amount}</Table.Cell>
             <Table.Cell>{paidAmount}</Table.Cell>
-            <Table.Cell>{pending}</Table.Cell>
+            <Table.Cell>{remaining}</Table.Cell>
             <Table.Cell>{paidInterest}</Table.Cell>
           </Table.Row>
 
           <Table.Row textAlign="left">
             <Table.Cell colSpan="4">
-              <span floated="right">
-                <WhatsappShareButton url={accountName} title={whatsMessageTitle} separator=" -">
-                  <WhatsappIcon size={30} round={true} />
-                </WhatsappShareButton>
-              </span>
+              {isCompleted ? null : (
+                <span floated="right">
+                  <WhatsappShareButton url={accountName} title={whatsMessageTitle} separator=" -">
+                    <WhatsappIcon size={30} round={true} />
+                  </WhatsappShareButton>
+                </span>
+              )}
 
               <Button
                 as="a"

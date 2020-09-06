@@ -20,7 +20,7 @@ const LoanTable = ({ loans }) => {
             Paid <br />(<Icon name="rupee sign" />)
           </Table.HeaderCell>
           <Table.HeaderCell>
-            Pending <br />(<Icon name="rupee sign" />)
+            Remaining <br />(<Icon name="rupee sign" />)
           </Table.HeaderCell>
           <Table.HeaderCell>
             Total <br />
