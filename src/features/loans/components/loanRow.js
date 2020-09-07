@@ -139,10 +139,20 @@ class LoanRow extends PureComponent {
     }
   };
 
-  constructWhatsAppMessage = (isCompleted, memberName, amount, paidAmount, paidInterest, remaining, nextInterest) => {
+  constructWhatsAppMessage = (
+    isCompleted,
+    memberName,
+    amount,
+    paidAmount,
+    remaining,
+    nextInterest,
+    isShowNextInterest
+  ) => {
     if (isCompleted) return `Hi ${memberName}, your loan has been paid completely \n`;
 
-    return `Hi ${memberName}, your loan payment has been made. \nLoan Amount - ₹ ${amount} \nTotal Paid - ₹ ${paidAmount} \nRemaining loan amount - ₹ ${remaining} \nNext Month's Interest - ₹ ${nextInterest} \n`;
+    return `Hi ${memberName}, your loan payment has been made. \nLoan Amount - ₹ ${amount} \nTotal Paid - ₹ ${paidAmount} \nRemaining loan amount - ₹ ${remaining} \n${
+      isShowNextInterest ? `Next Month's Interest - ₹ ${nextInterest} \n` : ''
+    }`;
   };
 
   render() {
@@ -156,8 +166,10 @@ class LoanRow extends PureComponent {
       subLoans = [],
       isCompleted,
       interestRate,
-      accountName
+      accountName,
+      isShowNextInterest
     } = this.props;
+    console.log('render -> isShowNextInterest', isShowNextInterest);
 
     const {
       isDisabled,
@@ -177,9 +189,9 @@ class LoanRow extends PureComponent {
       memberName,
       amount,
       paidAmount,
-      paidInterest,
       remaining,
-      nextInterest
+      nextInterest,
+      isShowNextInterest
     );
 
     return (
@@ -296,6 +308,7 @@ class LoanRow extends PureComponent {
             onClose={this.togglePaymentForm}
             onSubmit={this.submitPayment}
             nextInterest={nextInterest}
+            isShowNextInterest={isShowNextInterest}
           />
         ) : null}
 
@@ -336,6 +349,7 @@ const mapStateToProps = ({ members, loans, account }, { loanId }) => {
     subLoans: (loan.subLoans || []).sort((t1, t2) => (new Date(t1.date) > new Date(t2.date) ? 1 : -1)),
     isCompleted: loan.isCompleted,
     interestRate: ((account || {}).config || {}).interestRate || 1,
+    isShowNextInterest: !!((account || {}).config || {}).isShowNextInterest,
     accountName: (account || {}).name || 'N/A'
   };
 };
