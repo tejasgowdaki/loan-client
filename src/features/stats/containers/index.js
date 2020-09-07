@@ -41,6 +41,10 @@ class Stats extends Component {
 
     const profit = savings + loan.paidInterest + transaction.income - transaction.expense;
     const profitPerMember = parseInt(profit / members);
+
+    const profitWithOutTransaction = savings + loan.paidInterest;
+    const profitPerMemberWithOutTransaction = parseInt(profitWithOutTransaction / members);
+
     return (
       <Card.Group style={{ margin: '0.25em' }}>
         <Card>
@@ -65,6 +69,24 @@ class Stats extends Component {
           </Card.Content>
           <Card.Content description>
             <Icon name="rupee sign" /> {formatAmount(profitPerMember)}
+          </Card.Content>
+        </Card>
+
+        <Card>
+          <Card.Content style={{ background: '#000', color: 'white' }} header>
+            Profit (without transactions)
+          </Card.Content>
+          <Card.Content description>
+            <Icon name="rupee sign" /> {formatAmount(profitWithOutTransaction)}
+          </Card.Content>
+        </Card>
+
+        <Card>
+          <Card.Content style={{ background: '#000', color: 'white' }} header>
+            Profit per member (without transactions)
+          </Card.Content>
+          <Card.Content description>
+            <Icon name="rupee sign" /> {formatAmount(profitPerMemberWithOutTransaction)}
           </Card.Content>
         </Card>
 
