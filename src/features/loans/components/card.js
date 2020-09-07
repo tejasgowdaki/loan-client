@@ -218,7 +218,7 @@ const mapStateToProps = ({ members, loans }, { loanId }) => {
 
   return {
     memberName: member.name || 'N/A',
-    loanDate: loan.date ? moment(loan.date).format('DD MMMM YYYY') : 'N/A',
+    loanDate: loan.date ? moment(loan.date).format('D MMM YYYY') : 'N/A',
     loanAmount: loan.amount || '0',
     loanPaidAmount: loan.paidAmount || '0',
     loanPaidInterest: loan.paidInterest || '0',

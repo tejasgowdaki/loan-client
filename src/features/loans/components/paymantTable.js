@@ -2,6 +2,8 @@ import React from 'react';
 import { Table, Icon, Button, Header } from 'semantic-ui-react';
 import moment from 'moment';
 
+import { formatAmount } from '../../../helpers/utils';
+
 const PaymentTable = ({ payments = [], deletePayment, isDisabled }) => {
   if (!payments.length) return <Header as="h5">No payments made yet</Header>;
 
@@ -29,9 +31,9 @@ const PaymentTable = ({ payments = [], deletePayment, isDisabled }) => {
           <Table.Row key={_id} textAlign="left">
             <Table.Cell>{index + 1}</Table.Cell>
             <Table.Cell>{moment(date).format('D MMM YYYY')}</Table.Cell>
-            <Table.Cell>{amount}</Table.Cell>
-            <Table.Cell>{interest}</Table.Cell>
-            <Table.Cell>{amount + interest}</Table.Cell>
+            <Table.Cell>{formatAmount(amount)}</Table.Cell>
+            <Table.Cell>{formatAmount(interest)}</Table.Cell>
+            <Table.Cell>{formatAmount(amount + interest)}</Table.Cell>
             <Table.Cell>
               <Button
                 as="a"

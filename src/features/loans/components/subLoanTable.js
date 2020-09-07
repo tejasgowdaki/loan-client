@@ -2,6 +2,8 @@ import React from 'react';
 import { Table, Icon, Button, Header } from 'semantic-ui-react';
 import moment from 'moment';
 
+import { formatAmount } from '../../../helpers/utils';
+
 const SubLoanTable = ({ subLoans = [], deleteSubLoan, isDisabled }) => {
   if (!subLoans.length) return <Header as="h5">No loans present made yet</Header>;
 
@@ -23,7 +25,7 @@ const SubLoanTable = ({ subLoans = [], deleteSubLoan, isDisabled }) => {
           <Table.Row key={_id} textAlign="left">
             <Table.Cell>{index + 1}</Table.Cell>
             <Table.Cell>{moment(date).format('D MMM YYYY')}</Table.Cell>
-            <Table.Cell>{amount}</Table.Cell>
+            <Table.Cell>{formatAmount(amount)}</Table.Cell>
             <Table.Cell>
               <Button
                 as="a"

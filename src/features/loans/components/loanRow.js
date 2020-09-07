@@ -16,6 +16,8 @@ import { addPayment, deletePayment, deleteLoan, updateSubLoan, deleteSubLoan } f
 import { setAlert } from '../../alert/reducer';
 import { upsertLoan, removeLoan } from '../../loans/reducer';
 
+import { formatAmount } from '../../../helpers/utils';
+
 class LoanRow extends PureComponent {
   constructor(props) {
     super(props);
@@ -169,7 +171,6 @@ class LoanRow extends PureComponent {
       accountName,
       isShowNextInterest
     } = this.props;
-    console.log('render -> isShowNextInterest', isShowNextInterest);
 
     const {
       isDisabled,
@@ -199,10 +200,10 @@ class LoanRow extends PureComponent {
         <Table.Body>
           <Table.Row textAlign="left">
             <Table.Cell rowSpan="2">{slNumber}</Table.Cell>
-            <Table.Cell>{amount}</Table.Cell>
-            <Table.Cell>{paidAmount}</Table.Cell>
-            <Table.Cell>{remaining}</Table.Cell>
-            <Table.Cell>{paidInterest}</Table.Cell>
+            <Table.Cell>{formatAmount(amount)}</Table.Cell>
+            <Table.Cell>{formatAmount(paidAmount)}</Table.Cell>
+            <Table.Cell>{formatAmount(remaining)}</Table.Cell>
+            <Table.Cell>{formatAmount(paidInterest)}</Table.Cell>
           </Table.Row>
 
           <Table.Row textAlign="left">

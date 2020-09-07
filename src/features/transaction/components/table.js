@@ -4,28 +4,45 @@ import moment from 'moment';
 
 import { formatAmount } from '../../../helpers/utils';
 
-const DepositTable = ({ deposits = [], deleteDeposit, isDisabled }) => {
-  if (!deposits.length) return <Header as="h5">No deposits made yet</Header>;
+const TransactionTable = ({ type, transactions = [], openForm, deleteTransaction, isDisabled }) => {
+  if (!transactions.length) return <Header as="h5">{`No ${type} transactions found`}</Header>;
 
   return (
     <Table unstackable collapsing striped celled size="small" style={{ width: 'rem' }}>
       <Table.Header>
+        <Table.Row textAlign="left">
+          <Table.HeaderCell colSpan="3">{`Account's ${type}`}</Table.HeaderCell>
+          <Table.HeaderCell colSpan="2">
+            <Button
+              as="a"
+              floated="right"
+              size="mini"
+              color="blue"
+              onClick={() => openForm(type)}
+              disabled={isDisabled}
+            >
+              {`Add ${type}`}
+            </Button>
+          </Table.HeaderCell>
+        </Table.Row>
         <Table.Row textAlign="left">
           <Table.HeaderCell>Sl.</Table.HeaderCell>
           <Table.HeaderCell>Date</Table.HeaderCell>
           <Table.HeaderCell>
             Amount <br />(<Icon name="rupee sign" />)
           </Table.HeaderCell>
+          <Table.HeaderCell>Comment</Table.HeaderCell>
           <Table.HeaderCell>Action</Table.HeaderCell>
         </Table.Row>
       </Table.Header>
 
       <Table.Body>
-        {deposits.map(({ _id, amount = 0, date }, index) => (
+        {transactions.map(({ _id, amount, date, comment }, index) => (
           <Table.Row key={_id} textAlign="left">
             <Table.Cell>{index + 1}</Table.Cell>
             <Table.Cell>{moment(date).format('D MMM YYYY')}</Table.Cell>
             <Table.Cell>{formatAmount(amount)}</Table.Cell>
+            <Table.Cell>{comment}</Table.Cell>
 
             <Table.Cell>
               <Button
@@ -33,7 +50,7 @@ const DepositTable = ({ deposits = [], deleteDeposit, isDisabled }) => {
                 floated="right"
                 size="mini"
                 color="red"
-                onClick={() => deleteDeposit(_id)}
+                onClick={() => deleteTransaction(_id)}
                 disabled={isDisabled}
               >
                 Delete
@@ -46,4 +63,4 @@ const DepositTable = ({ deposits = [], deleteDeposit, isDisabled }) => {
   );
 };
 
-export default DepositTable;
+export default TransactionTable;

@@ -12,6 +12,8 @@ import { setAlert } from '../../alert/reducer';
 import { removeMember } from '../reducer';
 import { upsertSaving } from '../../savings/reducer';
 
+import { formatAmount } from '../../../helpers/utils';
+
 class MemberCard extends PureComponent {
   constructor(props) {
     super(props);
@@ -85,12 +87,12 @@ class MemberCard extends PureComponent {
 
                   <Label style={{ margin: '0.25em' }}>
                     Savings: <Icon name="rupee sign" />
-                    {totalSaving}
+                    {formatAmount(totalSaving)}
                   </Label>
 
                   <Label style={{ margin: '0.25em' }}>
                     Remaining loan amount: <Icon name="rupee sign" />
-                    {remainingLoanAmount}
+                    {formatAmount(remainingLoanAmount)}
                   </Label>
                 </Grid.Row>
               </Grid.Column>

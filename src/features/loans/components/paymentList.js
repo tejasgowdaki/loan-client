@@ -26,7 +26,7 @@ const PaymentList = ({ payments, deletePayment, isDisabled }) => {
             </Card.Header>
 
             <Card.Header style={{ marginTop: '0.2em' }}>
-              <Label>Date: {moment(date).format('DD MMMM YYYY')}</Label>
+              <Label>Date: {moment(date).format('D MMM YYYY')}</Label>
 
               <Label>
                 Amount: <Icon name="rupee sign" />

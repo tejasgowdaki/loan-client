@@ -1,6 +1,8 @@
 import React from 'react';
 import { Card, Icon, Header, Button, Label } from 'semantic-ui-react';
 
+import { formatAmount } from '../../../helpers/utils';
+
 const ShowCard = ({ name, mobile, totalSaving, remainingLoanAmount, toggleDepositForm, openLoanForm, isDisabled }) => {
   return (
     <div style={{ marginDown: '5em' }}>
@@ -20,12 +22,12 @@ const ShowCard = ({ name, mobile, totalSaving, remainingLoanAmount, toggleDeposi
 
               <Label float="left" style={{ margin: '.3em ' }}>
                 Savings: <Icon name="rupee sign" />
-                {totalSaving}
+                {formatAmount(totalSaving)}
               </Label>
 
               <Label float="left" style={{ margin: '.3em ' }}>
                 Remaining loan amount: <Icon name="rupee sign" />
-                {remainingLoanAmount}
+                {formatAmount(remainingLoanAmount)}
               </Label>
             </Card.Description>
           </Card.Content>

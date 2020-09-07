@@ -3,13 +3,15 @@ import { connect } from 'react-redux';
 import { Tab } from 'semantic-ui-react';
 
 import ConfirmModal from '../../common/confirmModal';
-import TransactionList from '../components/list';
 import TransactionForm from '../components/form';
+import TransactionTable from '../components/table';
 
 import { createTransaction, deleteTransaction } from '../api';
 
 import { setAlert } from '../../alert/reducer';
 import { newTransaction, removeTransaction } from '../reducer';
+
+const panes = [{ menuItem: 'Income' }, { menuItem: 'Expense' }];
 
 class Transactions extends Component {
   constructor(props) {
@@ -19,9 +21,12 @@ class Transactions extends Component {
       deleteTransactionId: null,
       isShowDeleteModal: false,
       isShowTransactionForm: false,
-      type: null
+      type: null,
+      activeIndex: 0
     };
   }
+
+  onTabChange = (event, data) => this.setState({ activeIndex: data.activeIndex });
 
   promptDeleteModal = (deleteTransactionId) => this.setState({ isShowDeleteModal: true, deleteTransactionId });
 
@@ -73,42 +78,31 @@ class Transactions extends Component {
 
   render() {
     const { incomeTransactions, expenseTransactions } = this.props;
-    const { isDisabled, isShowDeleteModal, isShowTransactionForm } = this.state;
-
-    const panes = [
-      {
-        menuItem: 'Income',
-        render: () => (
-          <Tab.Pane>
-            <TransactionList
-              type="income"
-              transactions={incomeTransactions}
-              deleteTransaction={this.promptDeleteModal}
-              openForm={this.toggleForm}
-            />
-          </Tab.Pane>
-        )
-      },
-      {
-        menuItem: 'Expense',
-        render: () => (
-          <Tab.Pane>
-            <TransactionList
-              type="expense"
-              transactions={expenseTransactions}
-              deleteTransaction={this.promptDeleteModal}
-              openForm={this.toggleForm}
-            />
-          </Tab.Pane>
-        )
-      }
-    ];
+    const { isDisabled, isShowDeleteModal, isShowTransactionForm, activeIndex } = this.state;
 
     return (
       <>
         <div style={{ margin: '1em' }}>
-          <Tab panes={panes} />
+          <Tab menu={{ secondary: true, pointing: true }} panes={panes} onTabChange={this.onTabChange} />
         </div>
+
+        {activeIndex === 0 ? (
+          <TransactionTable
+            type="income"
+            transactions={incomeTransactions}
+            deleteTransaction={this.promptDeleteModal}
+            openForm={this.toggleForm}
+          />
+        ) : null}
+
+        {activeIndex === 1 ? (
+          <TransactionTable
+            type="expense"
+            transactions={expenseTransactions}
+            deleteTransaction={this.promptDeleteModal}
+            openForm={this.toggleForm}
+          />
+        ) : null}
 
         {isShowDeleteModal ? (
           <ConfirmModal

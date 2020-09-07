@@ -6,6 +6,8 @@ import { getStats } from '../api';
 
 import { setAlert } from '../../alert/reducer';
 
+import { formatAmount } from '../../../helpers/utils';
+
 class Stats extends Component {
   constructor(props) {
     super(props);
@@ -53,7 +55,7 @@ class Stats extends Component {
             Profit
           </Card.Content>
           <Card.Content description>
-            <Icon name="rupee sign" /> {profit}
+            <Icon name="rupee sign" /> {formatAmount(profit)}
           </Card.Content>
         </Card>
 
@@ -62,7 +64,7 @@ class Stats extends Component {
             Profit per member
           </Card.Content>
           <Card.Content description>
-            <Icon name="rupee sign" /> {profitPerMember}
+            <Icon name="rupee sign" /> {formatAmount(profitPerMember)}
           </Card.Content>
         </Card>
 
@@ -71,7 +73,7 @@ class Stats extends Component {
             Savings
           </Card.Content>
           <Card.Content description>
-            <Icon name="rupee sign" /> {savings}
+            <Icon name="rupee sign" /> {formatAmount(savings)}
           </Card.Content>
         </Card>
 
@@ -80,7 +82,7 @@ class Stats extends Component {
             Loan granted
           </Card.Content>
           <Card.Content description>
-            <Icon name="rupee sign" /> {loan.amount}
+            <Icon name="rupee sign" /> {formatAmount(loan.amount)}
           </Card.Content>
         </Card>
 
@@ -89,7 +91,7 @@ class Stats extends Component {
             Loan recovered
           </Card.Content>
           <Card.Content description>
-            <Icon name="rupee sign" /> {loan.paidAmount}
+            <Icon name="rupee sign" /> {formatAmount(loan.paidAmount)}
           </Card.Content>
         </Card>
 
@@ -98,7 +100,7 @@ class Stats extends Component {
             Loan pending
           </Card.Content>
           <Card.Content description>
-            <Icon name="rupee sign" /> {loan.amount - loan.paidAmount}
+            <Icon name="rupee sign" /> {formatAmount(loan.amount - loan.paidAmount)}
           </Card.Content>
         </Card>
 
@@ -107,7 +109,7 @@ class Stats extends Component {
             Interest collected
           </Card.Content>
           <Card.Content description>
-            <Icon name="rupee sign" /> {loan.paidInterest}
+            <Icon name="rupee sign" /> {formatAmount(loan.paidInterest)}
           </Card.Content>
         </Card>
 
@@ -116,7 +118,7 @@ class Stats extends Component {
             Other Income
           </Card.Content>
           <Card.Content description>
-            <Icon name="rupee sign" /> {transaction.income}
+            <Icon name="rupee sign" /> {formatAmount(transaction.income)}
           </Card.Content>
         </Card>
 
@@ -125,7 +127,7 @@ class Stats extends Component {
             Other Expense
           </Card.Content>
           <Card.Content description>
-            <Icon name="rupee sign" /> {transaction.expense}
+            <Icon name="rupee sign" /> {formatAmount(transaction.expense)}
           </Card.Content>
         </Card>
       </Card.Group>
