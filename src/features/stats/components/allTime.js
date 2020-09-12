@@ -15,7 +15,8 @@ const AllTime = ({
   const profitWithOutTransaction = savings + loan.paidInterest;
   const profitPerMemberWithOutTransaction = parseInt(profitWithOutTransaction / members);
 
-  const purseAmount = savings + loan.paidInterest + transaction.income - transaction.expense - loan.amount;
+  const purseAmount =
+    savings - loan.amount + loan.paidAmount + loan.paidInterest + transaction.income - transaction.expense;
 
   return (
     <Card.Group style={{ margin: '0.25em' }}>
