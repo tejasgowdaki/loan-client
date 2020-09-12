@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Card, Icon } from 'semantic-ui-react';
+import { Tab } from 'semantic-ui-react';
+
+import AllTime from '../components/allTime';
+import Month from '../components/month';
 
 import { getStats } from '../api';
 
 import { setAlert } from '../../alert/reducer';
 
-import { formatAmount } from '../../../helpers/utils';
+const panes = [{ menuItem: 'All Time' }, { menuItem: 'Current Month' }];
 
 class Stats extends Component {
   constructor(props) {
@@ -16,13 +19,19 @@ class Stats extends Component {
       savings: 0,
       loan: { amount: 0, paidAmount: 0, paidInterest: 0 },
       transaction: { income: 0, expense: 0 },
-      isDisabled: false
+      monthlySavings: 0,
+      monthlyLoan: { amount: 0, paidAmount: 0, paidInterest: 0 },
+      monthlyTransaction: { income: 0, expense: 0 },
+      isDisabled: false,
+      activeIndex: 0
     };
   }
 
   componentDidMount = () => {
     this.fetchStats();
   };
+
+  onTabChange = (event, data) => this.setState({ activeIndex: data.activeIndex });
 
   fetchStats = async () => {
     try {
@@ -37,122 +46,29 @@ class Stats extends Component {
   };
 
   render() {
-    const { members, savings, loan, transaction } = this.state;
-
-    const profit = savings + loan.paidInterest + transaction.income - transaction.expense;
-    const profitPerMember = parseInt(profit / members);
-
-    const profitWithOutTransaction = savings + loan.paidInterest;
-    const profitPerMemberWithOutTransaction = parseInt(profitWithOutTransaction / members);
+    const {
+      activeIndex,
+      members,
+      savings,
+      loan,
+      transaction,
+      monthlySavings,
+      monthlyLoan,
+      monthlyTransaction
+    } = this.state;
 
     return (
-      <Card.Group style={{ margin: '0.25em' }}>
-        <Card>
-          <Card.Content style={{ background: '#000', color: 'white' }} header>
-            Members
-          </Card.Content>
-          <Card.Content description>{members}</Card.Content>
-        </Card>
+      <>
+        <Tab menu={{ secondary: true, pointing: true }} panes={panes} onTabChange={this.onTabChange} />
 
-        <Card>
-          <Card.Content style={{ background: '#000', color: 'white' }} header>
-            Profit
-          </Card.Content>
-          <Card.Content description>
-            <Icon name="rupee sign" /> {formatAmount(profit)}
-          </Card.Content>
-        </Card>
+        {activeIndex === 0 ? (
+          <AllTime members={members} savings={savings} loan={loan} transaction={transaction} />
+        ) : null}
 
-        <Card>
-          <Card.Content style={{ background: '#000', color: 'white' }} header>
-            Profit per member
-          </Card.Content>
-          <Card.Content description>
-            <Icon name="rupee sign" /> {formatAmount(profitPerMember)}
-          </Card.Content>
-        </Card>
-
-        <Card>
-          <Card.Content style={{ background: '#000', color: 'white' }} header>
-            Profit (without transactions)
-          </Card.Content>
-          <Card.Content description>
-            <Icon name="rupee sign" /> {formatAmount(profitWithOutTransaction)}
-          </Card.Content>
-        </Card>
-
-        <Card>
-          <Card.Content style={{ background: '#000', color: 'white' }} header>
-            Profit per member (without transactions)
-          </Card.Content>
-          <Card.Content description>
-            <Icon name="rupee sign" /> {formatAmount(profitPerMemberWithOutTransaction)}
-          </Card.Content>
-        </Card>
-
-        <Card>
-          <Card.Content style={{ background: '#000', color: 'white' }} header>
-            Savings
-          </Card.Content>
-          <Card.Content description>
-            <Icon name="rupee sign" /> {formatAmount(savings)}
-          </Card.Content>
-        </Card>
-
-        <Card>
-          <Card.Content style={{ background: '#000', color: 'white' }} header>
-            Loan granted
-          </Card.Content>
-          <Card.Content description>
-            <Icon name="rupee sign" /> {formatAmount(loan.amount)}
-          </Card.Content>
-        </Card>
-
-        <Card>
-          <Card.Content style={{ background: '#000', color: 'white' }} header>
-            Loan recovered
-          </Card.Content>
-          <Card.Content description>
-            <Icon name="rupee sign" /> {formatAmount(loan.paidAmount)}
-          </Card.Content>
-        </Card>
-
-        <Card>
-          <Card.Content style={{ background: '#000', color: 'white' }} header>
-            Loan pending
-          </Card.Content>
-          <Card.Content description>
-            <Icon name="rupee sign" /> {formatAmount(loan.amount - loan.paidAmount)}
-          </Card.Content>
-        </Card>
-
-        <Card>
-          <Card.Content style={{ background: '#000', color: 'white' }} header>
-            Interest collected
-          </Card.Content>
-          <Card.Content description>
-            <Icon name="rupee sign" /> {formatAmount(loan.paidInterest)}
-          </Card.Content>
-        </Card>
-
-        <Card>
-          <Card.Content style={{ background: '#000', color: 'white' }} header>
-            Other Income
-          </Card.Content>
-          <Card.Content description>
-            <Icon name="rupee sign" /> {formatAmount(transaction.income)}
-          </Card.Content>
-        </Card>
-
-        <Card>
-          <Card.Content style={{ background: '#000', color: 'white' }} header>
-            Other Expense
-          </Card.Content>
-          <Card.Content description>
-            <Icon name="rupee sign" /> {formatAmount(transaction.expense)}
-          </Card.Content>
-        </Card>
-      </Card.Group>
+        {activeIndex === 1 ? (
+          <Month savings={monthlySavings} loan={monthlyLoan} transaction={monthlyTransaction} />
+        ) : null}
+      </>
     );
   }
 }
