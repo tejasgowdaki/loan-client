@@ -11,55 +11,43 @@ const Month = ({
   return (
     <Card.Group style={{ margin: '0.25em' }}>
       <Card>
-        <Card.Content style={{ background: '#000', color: 'white' }} header>
-          Savings
-        </Card.Content>
-        <Card.Content description>
+        <Card.Content style={{ background: '#000', color: 'white' }}>Savings</Card.Content>
+        <Card.Content>
           <Icon name="rupee sign" /> {formatAmount(savings)}
         </Card.Content>
       </Card>
 
       <Card>
-        <Card.Content style={{ background: '#000', color: 'white' }} header>
-          Loan granted
-        </Card.Content>
-        <Card.Content description>
+        <Card.Content style={{ background: '#000', color: 'white' }}>Loan granted</Card.Content>
+        <Card.Content>
           <Icon name="rupee sign" /> {formatAmount(loan.amount)}
         </Card.Content>
       </Card>
 
       <Card>
-        <Card.Content style={{ background: '#000', color: 'white' }} header>
-          Loan recovered
-        </Card.Content>
-        <Card.Content description>
+        <Card.Content style={{ background: '#000', color: 'white' }}>Loan recovered</Card.Content>
+        <Card.Content>
           <Icon name="rupee sign" /> {formatAmount(loan.paidAmount)}
         </Card.Content>
       </Card>
 
       <Card>
-        <Card.Content style={{ background: '#000', color: 'white' }} header>
-          Interest collected
-        </Card.Content>
-        <Card.Content description>
+        <Card.Content style={{ background: '#000', color: 'white' }}>Interest collected</Card.Content>
+        <Card.Content>
           <Icon name="rupee sign" /> {formatAmount(loan.paidInterest)}
         </Card.Content>
       </Card>
 
       <Card>
-        <Card.Content style={{ background: '#000', color: 'white' }} header>
-          Other Income
-        </Card.Content>
-        <Card.Content description>
+        <Card.Content style={{ background: '#000', color: 'white' }}>Other Income</Card.Content>
+        <Card.Content>
           <Icon name="rupee sign" /> {formatAmount(transaction.income)}
         </Card.Content>
       </Card>
 
       <Card>
-        <Card.Content style={{ background: '#000', color: 'white' }} header>
-          Other Expense
-        </Card.Content>
-        <Card.Content description>
+        <Card.Content style={{ background: '#000', color: 'white' }}>Other Expense</Card.Content>
+        <Card.Content>
           <Icon name="rupee sign" /> {formatAmount(transaction.expense)}
         </Card.Content>
       </Card>
