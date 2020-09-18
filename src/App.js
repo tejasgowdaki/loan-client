@@ -1,17 +1,17 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 
-import Alert from './features/alert';
+import Loading from './routes/loading';
 
-import { getAccount } from './features/account/api';
+import Alert from './features/alert';
 
 import { fetchMembers } from './features/members/reducer';
 import { fetchSavings } from './features/savings/reducer';
 import { fetchLoans } from './features/loans/reducer';
 import { fetchTransactions } from './features/transaction/reducer';
-import { setAccount } from './features/account/reducer';
+import { fetchAccounts, setUser, setLoading } from './features/account/reducer';
 
-import { fetchAccountFromToken } from './helpers/auth';
+import { fetchDateFromToken } from './helpers/auth';
 
 import { Routes } from './routes';
 import { AuthRoutes } from './routes/auth';
@@ -20,21 +20,27 @@ class App extends Component {
   componentDidMount = () => {
     const token = localStorage.getItem('XFLK');
 
-    if (token) this.setAccount(token);
+    if (token) this.setUser(token);
   };
 
   componentDidUpdate(prevProps) {
-    if (!prevProps.isActiveSession && this.props.isActiveSession) this.fetchData();
+    if (
+      this.props.activeAccountId &&
+      (!prevProps.activeAccountId || prevProps.activeAccountId !== this.props.activeAccountId)
+    ) {
+      this.fetchData();
+    }
   }
 
-  setAccount = async (token) => {
-    const tokenObject = fetchAccountFromToken(token);
-    const account = await getAccount(tokenObject._id);
-    this.props.setAccount({ ...account, token });
+  setUser = async (token) => {
+    const tokenObject = fetchDateFromToken(token);
+    this.props.setUser({ ...tokenObject, token });
     this.fetchData();
   };
 
   fetchData = () => {
+    this.props.setLoading(true);
+    this.props.fetchAccounts(this.props.activeAccountId);
     this.props.fetchMembers();
     this.props.fetchSavings();
     this.props.fetchLoans();
@@ -43,9 +49,8 @@ class App extends Component {
 
   logout = async () => {
     try {
-      this.props.setAccount(null);
+      this.props.setUser(null);
       localStorage.removeItem('XFLK');
-      this.props.history.push('/');
     } catch (error) {
       console.error(error);
     }
@@ -55,14 +60,31 @@ class App extends Component {
     return (
       <Fragment>
         <Alert />
-        {this.props.isActiveSession ? <Routes name={this.props.name} logout={this.logout} /> : <AuthRoutes />}
+        {this.props.isLoading ? (
+          <Loading />
+        ) : this.props.activeAccountId ? (
+          <Routes name={this.props.name} logout={this.logout} />
+        ) : (
+          <AuthRoutes />
+        )}
       </Fragment>
     );
   }
 }
 
-const mapStateToProps = ({ account }) => ({ isActiveSession: !!account, name: (account || {}).name });
+const mapStateToProps = ({ isLoading, account, user }) => ({
+  activeAccountId: (user || {}).activeAccountId,
+  name: (account || {}).name
+});
 
-const mapDispatchToProps = { fetchMembers, fetchSavings, fetchLoans, setAccount, fetchTransactions };
+const mapDispatchToProps = {
+  fetchMembers,
+  fetchSavings,
+  fetchLoans,
+  fetchAccounts,
+  fetchTransactions,
+  setUser,
+  setLoading
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

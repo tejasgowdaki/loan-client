@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Dropdown } from 'semantic-ui-react';
+import { Form } from 'semantic-ui-react';
 
 import FormModal from '../../common/formModal';
 
@@ -8,10 +8,6 @@ const LoginForm = ({
   loginMobile,
   updateLoginMobile,
   loginMobileErrorMessage,
-  accounts,
-  loginAccount,
-  updateLoginAccount,
-  loginAccountErrorMessage,
   isShowOTP,
   loginOTP,
   updateLoginOTP,
@@ -20,8 +16,6 @@ const LoginForm = ({
   onSubmit,
   isDisabled
 }) => {
-  const filteredAccounts = accounts.filter(({ mobile }) => mobile === loginMobile);
-
   return (
     <FormModal
       header={header}
@@ -39,26 +33,11 @@ const LoginForm = ({
               type="number"
               placeholder="Mobile"
               name="mobile"
-              value={loginMobile}
+              value={loginMobile || ''}
               onChange={(e) => updateLoginMobile(e.target.value)}
               disabled={isDisabled || isShowOTP}
             />
             <span style={{ color: 'red' }}>{loginMobileErrorMessage}</span>
-          </Form.Field>
-
-          <Form.Field fluid required>
-            <label>Account</label>
-            <Dropdown
-              placeholder="Select Account"
-              fluid
-              selection
-              options={filteredAccounts}
-              value={loginAccount}
-              disabled={isDisabled || isShowOTP}
-              onChange={updateLoginAccount}
-            />
-
-            <span style={{ color: 'red' }}>{loginAccountErrorMessage}</span>
           </Form.Field>
 
           {isShowOTP ? (
@@ -69,7 +48,7 @@ const LoginForm = ({
                 type="number"
                 placeholder="OTP"
                 name="OTP"
-                value={loginOTP}
+                value={loginOTP || ''}
                 onChange={(e) => updateLoginOTP(e.target.value)}
                 disabled={isDisabled}
               />

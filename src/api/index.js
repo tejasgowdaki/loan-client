@@ -5,11 +5,11 @@ import apiHandler from './apiHandler';
 const baseUrl = process.env.REACT_APP_BASE_URL;
 
 const fetchHeader = () => {
-  const account = store.getState().account;
+  const user = store.getState().user;
 
   return {
     'Content-Type': 'application/json',
-    'x-auth-token': account ? account.token : null
+    'x-auth-token': user ? user.token : null
   };
 };
 

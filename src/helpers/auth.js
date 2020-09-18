@@ -1,5 +1,5 @@
 import jwtDecoder from 'jwt-decode';
 
-export const fetchAccountFromToken = (token) => {
+export const fetchDateFromToken = (token) => {
   return jwtDecoder(token);
 };

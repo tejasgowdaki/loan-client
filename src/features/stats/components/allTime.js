@@ -10,10 +10,11 @@ const AllTime = ({
   transaction = { income: 0, expense: 0 }
 }) => {
   const profit = savings + loan.paidInterest + transaction.income - transaction.expense;
-  const profitPerMember = parseInt(profit / members);
+  const profitPerMember = profit && members ? parseInt(profit / members) : 0;
 
   const profitWithOutTransaction = savings + loan.paidInterest;
-  const profitPerMemberWithOutTransaction = parseInt(profitWithOutTransaction / members);
+  const profitPerMemberWithOutTransaction =
+    profitWithOutTransaction && members ? parseInt(profitWithOutTransaction / members) : 0;
 
   const purseAmount =
     savings - loan.amount + loan.paidAmount + loan.paidInterest + transaction.income - transaction.expense;

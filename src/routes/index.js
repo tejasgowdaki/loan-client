@@ -20,6 +20,8 @@ const Stats = lazy(() => import(/* webpackChunkName: 'Stats' */ '../features/sta
 
 const Utilities = lazy(() => import(/* webpackChunkName: 'Utilities' */ '../features/utilities/containers'));
 
+const Accounts = lazy(() => import(/* webpackChunkName: 'Accounts' */ '../features/account/containers'));
+
 export const Routes = (props) => {
   return (
     <BrowserRouter>
@@ -102,6 +104,16 @@ export const Routes = (props) => {
               render={(matchProps) => (
                 <Layout {...props} {...matchProps}>
                   <Utilities {...matchProps} />
+                </Layout>
+              )}
+            />
+
+            <Route
+              path="/accounts"
+              exact
+              render={(matchProps) => (
+                <Layout {...props} {...matchProps}>
+                  <Accounts {...matchProps} />
                 </Layout>
               )}
             />

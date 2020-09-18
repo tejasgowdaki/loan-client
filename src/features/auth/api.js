@@ -19,3 +19,12 @@ export const login = async (account) => {
     throw error;
   }
 };
+
+export const signup = async (account) => {
+  try {
+    const response = await post(`${url}/signup`, account);
+    return response.account;
+  } catch (error) {
+    throw error;
+  }
+};

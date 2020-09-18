@@ -39,6 +39,10 @@ class Mobile extends Component {
             Active Loans
           </Menu.Item>
 
+          <Menu.Item as="a" active={pathname === '/accounts'} onClick={() => onClickNavigate('/accounts')}>
+            Accounts
+          </Menu.Item>
+
           <Menu.Item as="a" active={pathname === '/transactions'} onClick={() => onClickNavigate('/transactions')}>
             Transactions
           </Menu.Item>

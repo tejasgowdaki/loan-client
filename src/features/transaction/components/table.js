@@ -5,8 +5,6 @@ import moment from 'moment';
 import { formatAmount } from '../../../helpers/utils';
 
 const TransactionTable = ({ type, transactions = [], openForm, deleteTransaction, isDisabled }) => {
-  if (!transactions.length) return <Header as="h5">{`No ${type} transactions found`}</Header>;
-
   return (
     <Table unstackable collapsing striped celled size="small" style={{ width: 'rem' }}>
       <Table.Header>
@@ -35,30 +33,33 @@ const TransactionTable = ({ type, transactions = [], openForm, deleteTransaction
           <Table.HeaderCell>Action</Table.HeaderCell>
         </Table.Row>
       </Table.Header>
+      {transactions.length ? (
+        <Table.Body>
+          {transactions.map(({ _id, amount, date, comment }, index) => (
+            <Table.Row key={_id} textAlign="left">
+              <Table.Cell>{index + 1}</Table.Cell>
+              <Table.Cell>{moment(date).format('D MMM YYYY')}</Table.Cell>
+              <Table.Cell>{formatAmount(amount)}</Table.Cell>
+              <Table.Cell>{comment}</Table.Cell>
 
-      <Table.Body>
-        {transactions.map(({ _id, amount, date, comment }, index) => (
-          <Table.Row key={_id} textAlign="left">
-            <Table.Cell>{index + 1}</Table.Cell>
-            <Table.Cell>{moment(date).format('D MMM YYYY')}</Table.Cell>
-            <Table.Cell>{formatAmount(amount)}</Table.Cell>
-            <Table.Cell>{comment}</Table.Cell>
-
-            <Table.Cell>
-              <Button
-                as="a"
-                floated="right"
-                size="mini"
-                color="red"
-                onClick={() => deleteTransaction(_id)}
-                disabled={isDisabled}
-              >
-                Delete
-              </Button>
-            </Table.Cell>
-          </Table.Row>
-        ))}
-      </Table.Body>
+              <Table.Cell>
+                <Button
+                  as="a"
+                  floated="right"
+                  size="mini"
+                  color="red"
+                  onClick={() => deleteTransaction(_id)}
+                  disabled={isDisabled}
+                >
+                  Delete
+                </Button>
+              </Table.Cell>
+            </Table.Row>
+          ))}
+        </Table.Body>
+      ) : (
+        <Header as="h5">{`No ${type} transactions found`}</Header>
+      )}
     </Table>
   );
 };
