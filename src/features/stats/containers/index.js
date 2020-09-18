@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Tab } from 'semantic-ui-react';
+import { Tab, Menu, Header } from 'semantic-ui-react';
+import { WhatsappIcon, WhatsappShareButton } from 'react-share';
 
 import AllTime from '../components/allTime';
 import Month from '../components/month';
@@ -9,7 +10,7 @@ import { getStats } from '../api';
 
 import { setAlert } from '../../alert/reducer';
 
-const panes = [{ menuItem: 'All Time' }, { menuItem: 'Current Month' }];
+import { formatAmount } from '../../../helpers/utils';
 
 class Stats extends Component {
   constructor(props) {
@@ -45,6 +46,15 @@ class Stats extends Component {
     }
   };
 
+  constructWhatsAppMessage = (accountName, members, savings, loan, transaction) => {
+    const profit = savings + loan.paidInterest + transaction.income - transaction.expense;
+    const profitPerMember = parseInt(profit / members);
+
+    return `Hello, here is the profit details of ${accountName} \nTotal Profit - ₹ ${formatAmount(
+      profit
+    )} \nProfit per Member - ₹ ${formatAmount(profitPerMember)}`;
+  };
+
   render() {
     const {
       activeIndex,
@@ -56,6 +66,42 @@ class Stats extends Component {
       monthlyLoan,
       monthlyTransaction
     } = this.state;
+
+    const whatsMessageTitle = this.constructWhatsAppMessage(
+      this.props.accountName,
+      members,
+      savings,
+      loan,
+      transaction
+    );
+
+    const panes = [
+      {
+        menuItem: (
+          <Menu.Item key="all-time">
+            <Header as="h3" style={{ paddingRight: '1em' }}>
+              All Time
+            </Header>
+
+            <WhatsappShareButton url={' '} title={whatsMessageTitle} separator="">
+              <WhatsappIcon size={30} round={true} />
+            </WhatsappShareButton>
+          </Menu.Item>
+        )
+      },
+      {
+        menuItem: (
+          <Menu.Item key="current-month">
+            <Header as="h3" style={{ paddingRight: '1em' }}>
+              Current Month
+            </Header>
+            {/* <WhatsappShareButton url={this.props.accountName} title={'whatsMessageTitle'} separator=" -">
+              <WhatsappIcon size={30} round={true} />
+            </WhatsappShareButton> */}
+          </Menu.Item>
+        )
+      }
+    ];
 
     return (
       <>
@@ -73,6 +119,10 @@ class Stats extends Component {
   }
 }
 
+const mapStateToProps = ({ account }) => ({
+  accountName: (account || {}).name || 'N/A'
+});
+
 const mapDispatchToProps = { setAlert };
 
-export default connect(null, mapDispatchToProps)(Stats);
+export default connect(mapStateToProps, mapDispatchToProps)(Stats);
