@@ -45,7 +45,7 @@ class MemberShow extends Component {
 
       const saving = await deleteDeposit(this.props.savingId, { depositId: this.state.deleteDepositId });
       this.props.upsertSaving(saving);
-      this.props.setAlert({ type: 'Success', message: 'Successfully deleted deposit' });
+      this.props.setAlert({ type: 'Success', message: 'Successfully deleted saving' });
 
       this.setState({ isShowDeleteDepositModal: false, deleteDepositId: null, isDisabled: false });
     } catch (error) {
@@ -137,8 +137,8 @@ class MemberShow extends Component {
 
         {isShowDeleteDepositModal ? (
           <ConfirmModal
-            header="Deleting deposit!!"
-            content={`Are you sure you want to delete this deposit?`}
+            header="Deleting saving!!"
+            content={`Are you sure you want to delete this saving?`}
             onClickSubmit={this.confirmDeleteDeposit}
             onClickCancel={this.closeDeleteDepositModal}
           />

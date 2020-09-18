@@ -39,7 +39,7 @@ const DepositForm = ({ name, onClose, onSubmit, isDisabled, title = null }) => {
 
   return (
     <FormModal
-      header={title || `Add new deposit to ${name}`}
+      header={title || `Add new saving to ${name}`}
       onClose={onClose}
       onSubmit={submitForm}
       isDisabled={isDisabled}

@@ -142,7 +142,7 @@ class MemberCard extends PureComponent {
             disabled={isDisabled}
             onClick={this.toggleDepositForm}
           >
-            Add Deposit
+            Add Saving
           </Button>
         </Card.Content>
 

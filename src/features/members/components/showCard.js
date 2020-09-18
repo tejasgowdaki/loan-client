@@ -34,7 +34,7 @@ const ShowCard = ({ name, mobile, totalSaving, remainingLoanAmount, toggleDeposi
 
           <Card.Content extra>
             <Button as="a" size="small" color="green" disabled={isDisabled} onClick={toggleDepositForm}>
-              Add Deposit
+              Add Saving
             </Button>
 
             <Button as="a" size="small" color="blue" disabled={isDisabled} onClick={() => openLoanForm(null)}>

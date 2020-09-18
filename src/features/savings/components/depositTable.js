@@ -5,7 +5,7 @@ import moment from 'moment';
 import { formatAmount } from '../../../helpers/utils';
 
 const DepositTable = ({ deposits = [], deleteDeposit, isDisabled }) => {
-  if (!deposits.length) return <Header as="h5">No deposits made yet</Header>;
+  if (!deposits.length) return <Header as="h5">No savings made yet</Header>;
 
   return (
     <Table unstackable collapsing striped celled size="small" style={{ width: 'rem' }}>

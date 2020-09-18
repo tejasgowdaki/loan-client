@@ -3,7 +3,7 @@ import { Card, Button, Label, Icon } from 'semantic-ui-react';
 import moment from 'moment';
 
 const DepositList = ({ deposits, deleteDeposit, isDisabled }) => {
-  if (!deposits.length) return <div>No deposits found</div>;
+  if (!deposits.length) return <div>No savings found</div>;
 
   return (
     <Card.Group style={{ marginBottom: '2em' }}>
@@ -22,7 +22,7 @@ const DepositList = ({ deposits, deleteDeposit, isDisabled }) => {
                 onClick={() => deleteDeposit(_id)}
                 disabled={isDisabled}
               >
-                Delete Deposit
+                Delete Saving
               </Button>
             </Card.Header>
 
