@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Responsive, Button, Container, Menu, Segment, Visibility } from 'semantic-ui-react';
+import { Responsive, Button, Container, Menu, Segment, Visibility, Header } from 'semantic-ui-react';
+
+import { AccountTypeContext } from '../../context';
 
 const getWidth = () => {
   const isSSR = typeof window === 'undefined';
@@ -9,13 +11,15 @@ const getWidth = () => {
 };
 
 class Desktop extends Component {
+  static contextType = AccountTypeContext;
+
   state = {};
 
   hideFixedMenu = () => this.setState({ fixed: false });
   showFixedMenu = () => this.setState({ fixed: true });
 
   render() {
-    const { children, name = '', pathname, onClickNavigate, logout } = this.props;
+    const { children, accountName = '', accountStartDate, pathname, onClickNavigate, logout } = this.props;
     const { fixed } = this.state;
 
     return (
@@ -25,32 +29,48 @@ class Desktop extends Component {
             <Menu fixed={fixed ? 'top' : null} inverted={!fixed} pointing={!fixed} secondary={!fixed} size="large">
               <Container>
                 <Menu.Item as="a" header onClick={() => onClickNavigate('/')}>
-                  {name || 'Loan Manager'}
+                  <Header as="h4" inverted>
+                    {accountName || 'Loan Manager'}
+                    <Header.Subheader>
+                      <strong>{this.context ? 'Loan' : 'Chit '}</strong> Account,{' '}
+                      {accountStartDate ? `${accountStartDate}` : ''}
+                    </Header.Subheader>
+                  </Header>
                 </Menu.Item>
 
                 <Menu.Item as="a" active={pathname === '/members'} onClick={() => onClickNavigate('/members')}>
                   Members
                 </Menu.Item>
 
-                <Menu.Item
-                  as="a"
-                  active={pathname === '/active-loans'}
-                  onClick={() => onClickNavigate('/active-loans')}
-                >
-                  Active Loans
-                </Menu.Item>
+                {this.context ? (
+                  <Menu.Item
+                    as="a"
+                    active={pathname === '/active-loans'}
+                    onClick={() => onClickNavigate('/active-loans')}
+                  >
+                    Active Loans
+                  </Menu.Item>
+                ) : null}
+
+                {!this.context ? (
+                  <Menu.Item as="a" active={pathname === '/chits'} onClick={() => onClickNavigate('/chits')}>
+                    Chits
+                  </Menu.Item>
+                ) : null}
 
                 <Menu.Item as="a" active={pathname === '/accounts'} onClick={() => onClickNavigate('/accounts')}>
                   Accounts
                 </Menu.Item>
 
-                <Menu.Item
-                  as="a"
-                  active={pathname === '/transactions'}
-                  onClick={() => onClickNavigate('/transactions')}
-                >
-                  Transactions
-                </Menu.Item>
+                {this.context ? (
+                  <Menu.Item
+                    as="a"
+                    active={pathname === '/transactions'}
+                    onClick={() => onClickNavigate('/transactions')}
+                  >
+                    Transactions
+                  </Menu.Item>
+                ) : null}
 
                 <Menu.Item as="a" active={pathname === '/stats'} onClick={() => onClickNavigate('/stats')}>
                   Stats

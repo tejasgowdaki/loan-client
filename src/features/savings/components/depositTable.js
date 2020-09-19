@@ -4,8 +4,8 @@ import moment from 'moment';
 
 import { formatAmount } from '../../../helpers/utils';
 
-const DepositTable = ({ deposits = [], deleteDeposit, isDisabled }) => {
-  if (!deposits.length) return <Header as="h5">No savings made yet</Header>;
+const DepositTable = ({ deposits = [], deleteDeposit, isDisabled, isAccountTypeLoan }) => {
+  if (!deposits.length) return <Header as="h5">No {isAccountTypeLoan ? 'deposits' : 'payments'} made yet</Header>;
 
   return (
     <Table unstackable collapsing striped celled size="small" style={{ width: 'rem' }}>
@@ -24,7 +24,7 @@ const DepositTable = ({ deposits = [], deleteDeposit, isDisabled }) => {
         {deposits.map(({ _id, amount = 0, date }, index) => (
           <Table.Row key={_id} textAlign="left">
             <Table.Cell>{index + 1}</Table.Cell>
-            <Table.Cell>{moment(date).format('D MMM YYYY')}</Table.Cell>
+            <Table.Cell>{moment(date).format('Do MMM YYYY')}</Table.Cell>
             <Table.Cell>{formatAmount(amount)}</Table.Cell>
 
             <Table.Cell>

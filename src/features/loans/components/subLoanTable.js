@@ -24,7 +24,7 @@ const SubLoanTable = ({ subLoans = [], deleteSubLoan, isDisabled }) => {
         {subLoans.map(({ _id, amount = 0, date }, index) => (
           <Table.Row key={_id} textAlign="left">
             <Table.Cell>{index + 1}</Table.Cell>
-            <Table.Cell>{moment(date).format('D MMM YYYY')}</Table.Cell>
+            <Table.Cell>{moment(date).format('Do MMM YYYY')}</Table.Cell>
             <Table.Cell>{formatAmount(amount)}</Table.Cell>
             <Table.Cell>
               <Button
