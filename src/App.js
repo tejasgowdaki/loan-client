@@ -11,6 +11,7 @@ import { fetchSavings } from './features/savings/reducer';
 import { fetchLoans } from './features/loans/reducer';
 import { fetchTransactions } from './features/transaction/reducer';
 import { fetchAccounts, setUser, setLoading } from './features/account/reducer';
+import { fetchChits } from './features/chit/reducer';
 
 import { fetchDateFromToken } from './helpers/auth';
 
@@ -54,6 +55,7 @@ class App extends Component {
     this.props.fetchSavings();
     this.props.fetchLoans();
     this.props.fetchTransactions();
+    this.props.fetchChits();
   };
 
   logout = async () => {
@@ -102,7 +104,8 @@ const mapDispatchToProps = {
   fetchAccounts,
   fetchTransactions,
   setUser,
-  setLoading
+  setLoading,
+  fetchChits
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

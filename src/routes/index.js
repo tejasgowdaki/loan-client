@@ -21,6 +21,8 @@ const Utilities = lazy(() => import(/* webpackChunkName: 'Utilities' */ '../feat
 
 const Accounts = lazy(() => import(/* webpackChunkName: 'Accounts' */ '../features/account/containers'));
 
+const Chits = lazy(() => import(/* webpackChunkName: 'Chits' */ '../features/chit/containers'));
+
 export const Routes = (props) => {
   const isAccountTypeLoan = useContext(AccountTypeContext);
   return (
@@ -82,15 +84,29 @@ export const Routes = (props) => {
               />
             ) : null}
 
-            <Route
-              path="/stats"
-              exact
-              render={(matchProps) => (
-                <Layout {...props} {...matchProps}>
-                  <Stats {...matchProps} />
-                </Layout>
-              )}
-            />
+            {!isAccountTypeLoan ? (
+              <Route
+                path="/chits"
+                exact
+                render={(matchProps) => (
+                  <Layout {...props} {...matchProps}>
+                    <Chits {...matchProps} />
+                  </Layout>
+                )}
+              />
+            ) : null}
+
+            {isAccountTypeLoan ? (
+              <Route
+                path="/stats"
+                exact
+                render={(matchProps) => (
+                  <Layout {...props} {...matchProps}>
+                    <Stats {...matchProps} />
+                  </Layout>
+                )}
+              />
+            ) : null}
 
             <Route
               path="/utilities"

@@ -32,8 +32,8 @@ class Desktop extends Component {
                   <Header as="h4" inverted>
                     {accountName || 'Loan Manager'}
                     <Header.Subheader>
-                      <strong>{this.context ? 'Loan' : 'Chit '}</strong> Account,{' '}
-                      {accountStartDate ? `${accountStartDate}` : ''}
+                      <strong>{this.context ? 'Loan' : 'Chit '}</strong> Account{' '}
+                      {accountStartDate ? `, ${accountStartDate}` : ''}
                     </Header.Subheader>
                   </Header>
                 </Menu.Item>
@@ -72,9 +72,11 @@ class Desktop extends Component {
                   </Menu.Item>
                 ) : null}
 
-                <Menu.Item as="a" active={pathname === '/stats'} onClick={() => onClickNavigate('/stats')}>
-                  Stats
-                </Menu.Item>
+                {this.context ? (
+                  <Menu.Item as="a" active={pathname === '/stats'} onClick={() => onClickNavigate('/stats')}>
+                    Stats
+                  </Menu.Item>
+                ) : null}
 
                 <Menu.Item as="a" active={pathname === '/utilities'} onClick={() => onClickNavigate('/utilities')}>
                   Utilities

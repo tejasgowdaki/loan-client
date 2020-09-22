@@ -10,7 +10,11 @@ import { setSavings } from '../../savings/reducer';
 
 import { setAlert } from '../../alert/reducer';
 
+import { AccountTypeContext } from '../../../context';
+
 class Utilities extends PureComponent {
+  static contextType = AccountTypeContext;
+
   constructor(props) {
     super(props);
     this.state = {
@@ -54,7 +58,7 @@ class Utilities extends PureComponent {
           <Table.Body>
             <Table.Row textAlign="left">
               <Table.Cell>1</Table.Cell>
-              <Table.Cell>Add savings to all your members</Table.Cell>
+              <Table.Cell>{`Add ${this.context ? 'savings' : 'chit payment'} to all your members`}</Table.Cell>
               <Table.Cell>
                 <Button
                   as="a"
@@ -74,7 +78,7 @@ class Utilities extends PureComponent {
 
         {isShowDepositForm ? (
           <DepositForm
-            title="Add saving to all members"
+            title={`Add ${this.context ? 'savings' : 'chit payment'} to all members`}
             onClose={this.toggleDepositForm}
             onSubmit={this.submitDeposit}
             isDisabled={isDisabled}

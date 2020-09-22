@@ -20,7 +20,7 @@ class Mobile extends Component {
   handleToggle = () => this.setState({ sidebarOpened: true });
 
   render() {
-    const { children, accountName = '', pathname, onClickNavigate, logout } = this.props;
+    const { children, accountName = '', pathname, onClickNavigate, logout, accountStartDate } = this.props;
     const { sidebarOpened } = this.state;
 
     return (
@@ -59,9 +59,11 @@ class Mobile extends Component {
             Transactions
           </Menu.Item>
 
-          <Menu.Item as="a" active={pathname === '/stats'} onClick={() => onClickNavigate('/stats')}>
-            Stats
-          </Menu.Item>
+          {this.context ? (
+            <Menu.Item as="a" active={pathname === '/stats'} onClick={() => onClickNavigate('/stats')}>
+              Stats
+            </Menu.Item>
+          ) : null}
 
           <Menu.Item as="a" active={pathname === '/utilities'} onClick={() => onClickNavigate('/utilities')}>
             Utilities
@@ -83,7 +85,10 @@ class Mobile extends Component {
                 <Menu.Item as="a" header onClick={() => onClickNavigate('/')}>
                   <Header as="h4" inverted>
                     {accountName || 'Loan Manager'}
-                    <Header.Subheader>Account Type: {this.context ? 'Loan' : 'Chit'}</Header.Subheader>
+                    <Header.Subheader>
+                      <strong>{this.context ? 'Loan' : 'Chit '}</strong> Account{' '}
+                      {accountStartDate ? `, ${accountStartDate}` : ''}
+                    </Header.Subheader>
                   </Header>
                 </Menu.Item>
               </Menu>

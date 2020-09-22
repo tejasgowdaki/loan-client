@@ -6,6 +6,7 @@ import { members, searchText } from '../features/members/reducer';
 import { savings } from '../features/savings/reducer';
 import { loans } from '../features/loans/reducer';
 import { transactions } from '../features/transaction/reducer';
+import { chits } from '../features/chit/reducer';
 
 export default combineReducers({
   alert,
@@ -17,5 +18,6 @@ export default combineReducers({
   savings,
   transactions,
   searchText,
-  isLoading
+  isLoading,
+  chits
 });
