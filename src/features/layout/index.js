@@ -16,12 +16,13 @@ const { MediaContextProvider, Media } = createMedia({
   }
 });
 
-const Layout = ({ name, logout, children, history, location }) => (
+const Layout = ({ accountName, accountStartDate, logout, children, history, location }) => (
   <MediaContextProvider>
     <Media greaterThan="mobile">
       <ResponsiveContext.Provider value="web">
         <Desktop
-          name={name}
+          accountName={accountName}
+          accountStartDate={accountStartDate}
           onClickNavigate={(page) => history.push(page)}
           pathname={location.pathname}
           logout={logout}
@@ -33,7 +34,13 @@ const Layout = ({ name, logout, children, history, location }) => (
 
     <Media as={Sidebar.Pushable} at="mobile">
       <ResponsiveContext.Provider value="mobile">
-        <Mobile name={name} onClickNavigate={(page) => history.push(page)} pathname={location.pathname} logout={logout}>
+        <Mobile
+          accountName={accountName}
+          accountStartDate={accountStartDate}
+          onClickNavigate={(page) => history.push(page)}
+          pathname={location.pathname}
+          logout={logout}
+        >
           {children}
         </Mobile>
       </ResponsiveContext.Provider>

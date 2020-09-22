@@ -27,7 +27,7 @@ const DepositList = ({ deposits, deleteDeposit, isDisabled }) => {
             </Card.Header>
 
             <Card.Header style={{ margin: '1em' }}>
-              <Label style={{ margin: '0.25em' }}>Date: {moment(date).format('D MMM YYYY')}</Label>
+              <Label style={{ margin: '0.25em' }}>Date: {moment(date).format('Do MMM YYYY')}</Label>
 
               <Label style={{ margin: '0.25em' }}>
                 Amount: <Icon name="rupee sign" />

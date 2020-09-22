@@ -4,11 +4,11 @@ import moment from 'moment';
 
 import { formatAmount } from '../../../helpers/utils';
 
-const SubLoanTable = ({ subLoans = [], deleteSubLoan, isDisabled }) => {
-  if (!subLoans.length) return <Header as="h5">No loans present made yet</Header>;
+const ChitTable = ({ chits = [], toggleDeleteModal, isDisabled }) => {
+  if (!chits.length) return <Header as="h5">No chits present</Header>;
 
   return (
-    <Table unstackable collapsing celled structured compact size="small">
+    <Table unstackable collapsing striped celled size="small" style={{ width: 'rem' }}>
       <Table.Header>
         <Table.Row textAlign="left">
           <Table.HeaderCell>Sl.</Table.HeaderCell>
@@ -16,23 +16,26 @@ const SubLoanTable = ({ subLoans = [], deleteSubLoan, isDisabled }) => {
           <Table.HeaderCell>
             Amount <br />(<Icon name="rupee sign" />)
           </Table.HeaderCell>
+          <Table.HeaderCell>Receiver</Table.HeaderCell>
           <Table.HeaderCell>Action</Table.HeaderCell>
         </Table.Row>
       </Table.Header>
 
       <Table.Body>
-        {subLoans.map(({ _id, amount = 0, date }, index) => (
+        {chits.map(({ _id, amount = 0, date, receiver, memberId }, index) => (
           <Table.Row key={_id} textAlign="left">
             <Table.Cell>{index + 1}</Table.Cell>
             <Table.Cell>{moment(date).format('Do MMM YYYY')}</Table.Cell>
             <Table.Cell>{formatAmount(amount)}</Table.Cell>
+            <Table.Cell>{receiver === 'agent' ? 'Agent' : memberId ? memberId.name : 'NA'}</Table.Cell>
+
             <Table.Cell>
               <Button
                 as="a"
                 floated="right"
                 size="mini"
                 color="red"
-                onClick={() => deleteSubLoan({ _id })}
+                onClick={() => toggleDeleteModal(_id)}
                 disabled={isDisabled}
               >
                 Delete
@@ -45,4 +48,4 @@ const SubLoanTable = ({ subLoans = [], deleteSubLoan, isDisabled }) => {
   );
 };
 
-export default SubLoanTable;
+export default ChitTable;

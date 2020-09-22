@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
+import moment from 'moment';
 
 import Loading from './routes/loading';
 
@@ -10,17 +11,26 @@ import { fetchSavings } from './features/savings/reducer';
 import { fetchLoans } from './features/loans/reducer';
 import { fetchTransactions } from './features/transaction/reducer';
 import { fetchAccounts, setUser, setLoading } from './features/account/reducer';
+import { fetchChits } from './features/chit/reducer';
 
 import { fetchDateFromToken } from './helpers/auth';
 
 import { Routes } from './routes';
 import { AuthRoutes } from './routes/auth';
 
+import { AccountTypeContext } from './context';
+
+import { LOAN } from './constants';
+
 class App extends Component {
   componentDidMount = () => {
     const token = localStorage.getItem('XFLK');
 
-    if (token) this.setUser(token);
+    if (token) {
+      this.setUser(token);
+    } else {
+      this.props.setLoading(false);
+    }
   };
 
   componentDidUpdate(prevProps) {
@@ -45,6 +55,7 @@ class App extends Component {
     this.props.fetchSavings();
     this.props.fetchLoans();
     this.props.fetchTransactions();
+    this.props.fetchChits();
   };
 
   logout = async () => {
@@ -59,14 +70,20 @@ class App extends Component {
   render() {
     return (
       <Fragment>
+        <AccountTypeContext.Provider value={this.props.isAccountTypeLoan}>
+          {this.props.isLoading ? (
+            <Loading />
+          ) : this.props.activeAccountId ? (
+            <Routes
+              accountName={this.props.accountName}
+              accountStartDate={this.props.accountStartDate}
+              logout={this.logout}
+            />
+          ) : (
+            <AuthRoutes />
+          )}
+        </AccountTypeContext.Provider>
         <Alert />
-        {this.props.isLoading ? (
-          <Loading />
-        ) : this.props.activeAccountId ? (
-          <Routes name={this.props.name} logout={this.logout} />
-        ) : (
-          <AuthRoutes />
-        )}
       </Fragment>
     );
   }
@@ -74,7 +91,10 @@ class App extends Component {
 
 const mapStateToProps = ({ isLoading, account, user }) => ({
   activeAccountId: (user || {}).activeAccountId,
-  name: (account || {}).name
+  accountName: (account || {}).name,
+  accountStartDate: account && account.startDate ? moment(account.startDate).format('Do MMM YYYY') : null,
+  isAccountTypeLoan: LOAN === (account || {}).type,
+  isLoading
 });
 
 const mapDispatchToProps = {
@@ -84,7 +104,8 @@ const mapDispatchToProps = {
   fetchAccounts,
   fetchTransactions,
   setUser,
-  setLoading
+  setLoading,
+  fetchChits
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

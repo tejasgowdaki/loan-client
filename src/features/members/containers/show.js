@@ -16,9 +16,10 @@ import { setAlert } from '../../alert/reducer';
 import { upsertSaving } from '../../savings/reducer';
 import { newLoan, upsertLoan, removeLoan } from '../../loans/reducer';
 
-const panes = [{ menuItem: 'Loan' }, { menuItem: 'Saving' }];
+import { AccountTypeContext } from '../../../context';
 
 class MemberShow extends Component {
+  static contextType = AccountTypeContext;
   constructor(props) {
     super(props);
     this.state = {
@@ -45,7 +46,7 @@ class MemberShow extends Component {
 
       const saving = await deleteDeposit(this.props.savingId, { depositId: this.state.deleteDepositId });
       this.props.upsertSaving(saving);
-      this.props.setAlert({ type: 'Success', message: 'Successfully deleted saving' });
+      this.props.setAlert({ type: 'Success', message: `Successfully deleted ${this.context ? 'saving' : 'payment'}` });
 
       this.setState({ isShowDeleteDepositModal: false, deleteDepositId: null, isDisabled: false });
     } catch (error) {
@@ -59,7 +60,7 @@ class MemberShow extends Component {
   submitDeposit = async (amount, date) => {
     try {
       if (!this.props.savingId) {
-        this.props.setAlert({ type: 'Error', message: `Saving not found for ${this.props.name}` });
+        this.props.setAlert({ type: 'Error', message: `Record not found for ${this.props.name}` });
         this.toggleDepositForm();
         return;
       }
@@ -112,8 +113,10 @@ class MemberShow extends Component {
   };
 
   render() {
-    const { name, mobile, totalSaving, deposits, loans, remainingLoanAmount } = this.props;
+    const { name, mobile, totalSaving, deposits, loans, remainingLoanAmount, instalmentCount } = this.props;
     const { isDisabled, isShowDeleteDepositModal, isShowDepositForm, isShowLoanForm, activeIndex } = this.state;
+
+    const panes = this.context ? [{ menuItem: 'Loan' }, { menuItem: 'Saving' }] : [{ menuItem: 'Payments' }];
 
     return (
       <>
@@ -125,20 +128,27 @@ class MemberShow extends Component {
           toggleDepositForm={this.toggleDepositForm}
           openLoanForm={this.openLoanForm}
           isDisabled={isDisabled}
+          instalmentCount={instalmentCount}
+          isAccountTypeLoan={this.context}
         />
 
         <Tab menu={{ secondary: true, pointing: true }} panes={panes} onTabChange={this.onTabChange} />
 
-        {activeIndex === 0 ? <LoanTable loans={loans} /> : null}
+        {this.context && activeIndex === 0 ? <LoanTable loans={loans} /> : null}
 
-        {activeIndex === 1 ? (
-          <DepositTable deposits={deposits} deleteDeposit={this.promptDepositDelete} isDisabled={isDisabled} />
+        {(this.context && activeIndex === 1) || !this.context ? (
+          <DepositTable
+            deposits={deposits}
+            deleteDeposit={this.promptDepositDelete}
+            isDisabled={isDisabled}
+            isAccountTypeLoan={this.context}
+          />
         ) : null}
 
         {isShowDeleteDepositModal ? (
           <ConfirmModal
-            header="Deleting saving!!"
-            content={`Are you sure you want to delete this saving?`}
+            header={`Deleting ${this.context ? 'saving' : 'payment'}!!`}
+            content={`Are you sure you want to delete this ${this.context ? 'saving' : 'payment'}?`}
             onClickSubmit={this.confirmDeleteDeposit}
             onClickCancel={this.closeDeleteDepositModal}
           />
@@ -146,6 +156,7 @@ class MemberShow extends Component {
 
         {isShowDepositForm ? (
           <DepositForm
+            title={`Add new ${this.context ? 'saving' : 'payment'} to ${name}`}
             name={this.props.name}
             onClose={this.toggleDepositForm}
             onSubmit={this.submitDeposit}
@@ -182,7 +193,8 @@ const mapStateToProps = ({ members, savings, loans }, ownProps) => {
     savingId: saving._id || null,
     deposits: (saving.deposits || []).sort((t1, t2) => (new Date(t1.date) > new Date(t2.date) ? 1 : -1)),
     loans: memberLoans,
-    remainingLoanAmount
+    remainingLoanAmount,
+    instalmentCount: (saving.deposits || []).length
   };
 };
 

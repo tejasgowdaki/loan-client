@@ -342,14 +342,14 @@ const mapStateToProps = ({ members, loans, account }, { loanId }) => {
 
   return {
     memberName: member.name || 'N/A',
-    date: loan.date ? moment(loan.date).format('D MMM YYYY') : 'N/A',
+    date: loan.date ? moment(loan.date).format('Do MMM YYYY') : 'N/A',
     amount: loan.amount || 0,
     paidAmount: loan.paidAmount || 0,
     paidInterest: loan.paidInterest || 0,
     payments: (loan.payments || []).sort((t1, t2) => (new Date(t1.date) > new Date(t2.date) ? 1 : -1)),
     subLoans: (loan.subLoans || []).sort((t1, t2) => (new Date(t1.date) > new Date(t2.date) ? 1 : -1)),
     isCompleted: loan.isCompleted,
-    interestRate: ((account || {}).config || {}).interestRate || 1,
+    interestRate: ((account || {}).config || {}).interestRate || 0,
     isShowNextInterest: !!((account || {}).config || {}).isShowNextInterest,
     accountName: (account || {}).name || 'N/A'
   };

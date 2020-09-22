@@ -56,6 +56,7 @@ class Accounts extends Component {
 
   validate = () => {
     if (!this.state.account.name) return false;
+    if (!this.state.account.type) return false;
 
     return true;
   };
@@ -103,7 +104,7 @@ class Accounts extends Component {
         <Table unstackable collapsing striped celled size="small" style={{ width: 'rem' }}>
           <Table.Header>
             <Table.Row textAlign="left">
-              <Table.HeaderCell colSpan="2">Accounts</Table.HeaderCell>
+              <Table.HeaderCell colSpan="3">Accounts</Table.HeaderCell>
               <Table.HeaderCell>
                 <Button as="a" floated="right" size="mini" color="blue" onClick={this.toggleForm} disabled={isDisabled}>
                   {`Add Account`}
@@ -113,18 +114,20 @@ class Accounts extends Component {
             <Table.Row textAlign="left">
               <Table.HeaderCell>Sl.</Table.HeaderCell>
               <Table.HeaderCell>Name</Table.HeaderCell>
+              <Table.HeaderCell>Type</Table.HeaderCell>
               <Table.HeaderCell>Action</Table.HeaderCell>
             </Table.Row>
           </Table.Header>
 
           <Table.Body>
-            {accounts.map(({ _id, name }, index) => (
-              <Table.Row key={_id} textAlign="left">
+            {accounts.map((account, index) => (
+              <Table.Row key={account._id} textAlign="left">
                 <Table.Cell>{index + 1}</Table.Cell>
-                <Table.Cell>{name}</Table.Cell>
+                <Table.Cell>{account.name}</Table.Cell>
+                <Table.Cell>{account.type}</Table.Cell>
 
                 <Table.Cell>
-                  {activeAccountId === _id ? (
+                  {activeAccountId === account._id ? (
                     <Button as="a" floated="right" size="mini" color="green" disabled>
                       Active
                     </Button>
@@ -134,7 +137,7 @@ class Accounts extends Component {
                       floated="right"
                       size="mini"
                       color="red"
-                      onClick={() => this.toggleSwitchModal(_id, name)}
+                      onClick={() => this.toggleSwitchModal(account._id, account.name)}
                       disabled={isDisabled}
                     >
                       Switch
@@ -146,7 +149,7 @@ class Accounts extends Component {
                     floated="right"
                     size="mini"
                     color="blue"
-                    onClick={() => this.toggleForm({ _id, name })}
+                    onClick={() => this.toggleForm(account)}
                     disabled={isDisabled}
                   >
                     Edit

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Segment, Header, Button, Grid } from 'semantic-ui-react';
 
-import MemberForm from '../../members/components/form';
+import SignUpForm from '../components/signupForm';
 import LoginForm from '../components/loginForm';
 
 import { requestLoginOTP, login, signup } from '../api';
@@ -46,6 +46,7 @@ class LandingPage extends Component {
     if (!this.state.account.name) return false;
     if (!this.state.account.mobile) return false;
     if (this.state.account.mobile.length !== 10) return false;
+    if (!this.state.account.type) return false;
 
     return true;
   };
@@ -191,10 +192,10 @@ class LandingPage extends Component {
         </Segment>
 
         {this.state.isShowSignUpForm ? (
-          <MemberForm
+          <SignUpForm
             header="Create Account"
-            member={this.state.account}
-            updateMember={this.updateAccount}
+            account={this.state.account}
+            updateAccount={this.updateAccount}
             onClose={this.toggleSignUpForm}
             onSubmit={this.onSubmitSignUp}
             isDisabled={this.state.isDisabled}

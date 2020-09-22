@@ -3,7 +3,17 @@ import { Card, Icon, Header, Button, Label } from 'semantic-ui-react';
 
 import { formatAmount } from '../../../helpers/utils';
 
-const ShowCard = ({ name, mobile, totalSaving, remainingLoanAmount, toggleDepositForm, openLoanForm, isDisabled }) => {
+const ShowCard = ({
+  name,
+  mobile,
+  totalSaving,
+  remainingLoanAmount,
+  toggleDepositForm,
+  openLoanForm,
+  isDisabled,
+  isAccountTypeLoan,
+  instalmentCount = 0
+}) => {
   return (
     <div style={{ marginDown: '5em' }}>
       <Card.Group>
@@ -21,25 +31,34 @@ const ShowCard = ({ name, mobile, totalSaving, remainingLoanAmount, toggleDeposi
               </Label>
 
               <Label float="left" style={{ margin: '.3em ' }}>
-                Savings: <Icon name="rupee sign" />
+                {isAccountTypeLoan ? 'Savings' : 'Total amount received'}: <Icon name="rupee sign" />
                 {formatAmount(totalSaving)}
               </Label>
 
-              <Label float="left" style={{ margin: '.3em ' }}>
-                Remaining loan amount: <Icon name="rupee sign" />
-                {formatAmount(remainingLoanAmount)}
-              </Label>
+              {isAccountTypeLoan ? (
+                <Label float="left" style={{ margin: '.3em ' }}>
+                  Remaining loan amount: <Icon name="rupee sign" />
+                  {formatAmount(remainingLoanAmount)}
+                </Label>
+              ) : (
+                <Label style={{ margin: '0.25em' }}>
+                  No. instalments Paid:
+                  {instalmentCount}
+                </Label>
+              )}
             </Card.Description>
           </Card.Content>
 
           <Card.Content extra>
             <Button as="a" size="small" color="green" disabled={isDisabled} onClick={toggleDepositForm}>
-              Add Saving
+              Add {isAccountTypeLoan ? 'Saving' : 'Payment'}
             </Button>
 
-            <Button as="a" size="small" color="blue" disabled={isDisabled} onClick={() => openLoanForm(null)}>
-              New Loan
-            </Button>
+            {isAccountTypeLoan ? (
+              <Button as="a" size="small" color="blue" disabled={isDisabled} onClick={() => openLoanForm(null)}>
+                New Loan
+              </Button>
+            ) : null}
           </Card.Content>
         </Card>
       </Card.Group>

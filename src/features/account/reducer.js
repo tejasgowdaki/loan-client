@@ -58,7 +58,23 @@ const setAccounts = (accounts) => ({ type: SET_ACCOUNTS, accounts });
 
 export const newAccount = (account) => ({ type: NEW_ACCOUNT, account });
 
-export const upsertAccount = (account) => ({ type: UPSERT_ACCOUNT, account });
+const updateAccount = (account) => ({ type: UPSERT_ACCOUNT, account });
+
+export const upsertAccount = (account) => {
+  return async (dispatch, getState) => {
+    try {
+      dispatch(updateAccount(account));
+      if (getState().account._id === account._id) dispatch(setAccount(account));
+    } catch (error) {
+      dispatch(
+        setAlert({
+          type: 'Error',
+          message: 'Oops! Account update rejected the request'
+        })
+      );
+    }
+  };
+};
 
 export const removeAccount = (accountId) => ({ type: REMOVE_ACCOUNT, accountId });
 
