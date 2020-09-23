@@ -55,9 +55,11 @@ class Mobile extends Component {
             Accounts
           </Menu.Item>
 
-          <Menu.Item as="a" active={pathname === '/transactions'} onClick={() => onClickNavigate('/transactions')}>
-            Transactions
-          </Menu.Item>
+          {this.context ? (
+            <Menu.Item as="a" active={pathname === '/transactions'} onClick={() => onClickNavigate('/transactions')}>
+              Transactions
+            </Menu.Item>
+          ) : null}
 
           {this.context ? (
             <Menu.Item as="a" active={pathname === '/stats'} onClick={() => onClickNavigate('/stats')}>
