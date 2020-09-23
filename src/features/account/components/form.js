@@ -86,7 +86,7 @@ const AccountForm = ({
 
             <SemanticDatepicker
               format="DD-MM-YYYY"
-              value={startDate}
+              value={startDate ? new Date(startDate) : null}
               onChange={onChangeStartDate}
               showToday={false}
               datePickerOnly
