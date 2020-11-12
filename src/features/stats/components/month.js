@@ -8,8 +8,18 @@ const Month = ({
   loan = { paidInterest: 0, paidAmount: 0, amount: 0 },
   transaction = { income: 0, expense: 0 }
 }) => {
+  const purseAmount =
+    savings - loan.amount + loan.paidAmount + loan.paidInterest + transaction.income - transaction.expense;
+
   return (
     <Card.Group style={{ margin: '0.25em' }}>
+      <Card>
+        <Card.Content style={{ background: '#000', color: 'white' }}>Amount in purse</Card.Content>
+        <Card.Content>
+          <Icon name="rupee sign" /> {formatAmount(purseAmount)}
+        </Card.Content>
+      </Card>
+
       <Card>
         <Card.Content style={{ background: '#000', color: 'white' }}>Savings</Card.Content>
         <Card.Content>
