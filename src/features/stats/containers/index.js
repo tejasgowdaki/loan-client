@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Tab, Menu, Header } from 'semantic-ui-react';
 import { WhatsappIcon, WhatsappShareButton } from 'react-share';
+import moment from 'moment';
 
 import AllTime from '../components/allTime';
 import Month from '../components/month';
@@ -24,7 +25,8 @@ class Stats extends Component {
       monthlyLoan: { amount: 0, paidAmount: 0, paidInterest: 0 },
       monthlyTransaction: { income: 0, expense: 0 },
       isDisabled: false,
-      activeIndex: 0
+      activeIndex: 0,
+      month: moment().format('YYYY-MM')
     };
   }
 
@@ -34,10 +36,10 @@ class Stats extends Component {
 
   onTabChange = (event, data) => this.setState({ activeIndex: data.activeIndex });
 
-  fetchStats = async () => {
+  fetchStats = async (isOnlyMonth = false, month = null) => {
     try {
       this.setState({ isDisabled: true });
-      const stats = await getStats();
+      const stats = await getStats(isOnlyMonth, month);
 
       this.setState({ isDisabled: false, ...stats });
     } catch (error) {
@@ -55,6 +57,11 @@ class Stats extends Component {
     )} \nProfit per Member - ₹ ${formatAmount(profitPerMember)}`;
   };
 
+  onChangeMonth = (e) => {
+    this.setState({ month: e.target.value });
+    this.fetchStats(true, e.target.value);
+  };
+
   render() {
     const {
       activeIndex,
@@ -64,7 +71,8 @@ class Stats extends Component {
       transaction,
       monthlySavings,
       monthlyLoan,
-      monthlyTransaction
+      monthlyTransaction,
+      month
     } = this.state;
 
     const whatsMessageTitle = this.constructWhatsAppMessage(
@@ -112,7 +120,13 @@ class Stats extends Component {
         ) : null}
 
         {activeIndex === 1 ? (
-          <Month savings={monthlySavings} loan={monthlyLoan} transaction={monthlyTransaction} />
+          <Month
+            savings={monthlySavings}
+            loan={monthlyLoan}
+            transaction={monthlyTransaction}
+            month={month}
+            onChangeMonth={this.onChangeMonth}
+          />
         ) : null}
       </>
     );

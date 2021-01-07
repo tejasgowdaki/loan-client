@@ -2,9 +2,9 @@ import { get } from '../../api/index';
 
 const url = '/stats';
 
-export const getStats = async () => {
+export const getStats = async (isOnlyMonth = false, month = null) => {
   try {
-    return await get(url);
+    return get(`${url}?isOnlyMonth=${isOnlyMonth}&&month=${month || ''}`);
   } catch (error) {
     throw error;
   }
